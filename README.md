@@ -4,9 +4,9 @@ Curtain Call is a responsive web application written in go.
 The application is meant to be an digital alertnative to the paper playbill one recieves prior to a show. 
 Curtain Call aims to both improve the theater experience for guests and reduce waste created by performance locations.
 
-## Features(MVP v1.0)
+## Version 1.0 Features
 
-### Cast
+### The Cast
 
 The Cast feature is an interactive view of the performing Cast Members.
 
@@ -16,9 +16,11 @@ Content displayed via this features includes:
 - Performer picture 
 - Performer name
 - Character name
-- Social Links(Insta, Twitter, Fb)
 - Bio
-- You may reconize from
+- Social Links(Insta, Twitter, Fb)
+
+Additional future features:
+- You may reconize from...
 - Audience Interactions
 
 ### Musical Numbers
@@ -30,5 +32,15 @@ Content displayed via this features includes:
 - Songs List
 - Performers
 - Musicians
-- Act Details
+
+Additional future features:
 - Links to Apple Music and Spotify
+
+## Future Potential Features
+### Title Page ?
+### Letters From the Company ?
+### Donors ?
+### Staff & Credits ?
+### Board of Directors ?
+### Local ADD Space ?
+### Show Merchandise ?
