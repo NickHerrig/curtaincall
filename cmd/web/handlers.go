@@ -7,20 +7,18 @@ import (
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
     if r.URL.Path != "/" {
-        http.NotFound(w, r)
+        app.notFound(w)
         return
     }
 
     ts, err := template.ParseFiles("./ui/html/home.page.tmpl")
     if err != nil {
-        app.errorLog.Println(err.Error())
-        http.Error(w, "Internal Server Error", 500)
+        app.serverError(w, err)
         return
     }
 
     err = ts.Execute(w, nil)
     if err != nil {
-        app.errorLog.Println(err.Error())
-        http.Error(w, "Internal Server Error", 500)
+        app.serverError(w, err)
     }
 }
