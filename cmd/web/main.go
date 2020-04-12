@@ -25,16 +25,10 @@ func main() {
         infoLog:  infoLog,
     }
 
-    mux := http.NewServeMux()
-    mux.HandleFunc("/", app.home)
-
-    fileServer := http.FileServer(http.Dir("./ui/static/"))
-    mux.Handle("/static/", http.StripPrefix("/static", fileServer))
-
     srv := &http.Server{
         Addr:     *addr,
         ErrorLog: errorLog,
-        Handler:  mux,
+        Handler:  app.routes(),
     }
 
     infoLog.Printf("Starting Curtain Call on port %s", *addr)
