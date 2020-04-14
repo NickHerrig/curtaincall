@@ -3,8 +3,9 @@
 ```
 CREATE TABLE theaters (
     theater_id INTEGER   NOT NULL   PRIMARY KEY,
-    name       TEXT,
-    ...
+    name       TEXT
+    address    TEXT
+    
 );
 
 CREATE TABLE theaters_donors_bridge (
@@ -16,8 +17,7 @@ CREATE TABLE theaters_donors_bridge (
 CREATE TABLE donors (
     donor_id INTEGER   NOT NULL   PRIMARY KEY,
     name     TEXT,
-    donation INTEGER,
-    ...
+    donation INTEGER
 );
 
 CREATE TABLE theaters_shows_bridge (
@@ -31,14 +31,12 @@ CREATE TABLE staff (
     name        TEXT,
     position    TEXT,
     theater_id  INTEGER  NOT NULL    REFERENCES theaters 
-    ...
  );
 
 CREATE TABLE advertisers (
     advertiser_id  INTEGER  NOT NULL    PRIMARY KEY, 
     name           TEXT,
     theater_id     INTEGER  NOT NULL    REFERENCES theaters 
-    ...
  );
 
 CREATE TABLE advertisements (
@@ -46,14 +44,12 @@ CREATE TABLE advertisements (
     name             TEXT,
     content          BLOB,
     advertiser_id    INTEGER  NOT NULL    REFERENCES advertisers 
-    ...
  );
 
 CREATE TABLE shows (
     show_id INTEGER  NOT NULL    PRIMARY KEY,
     name    TEXT
     company TEXT
-    ...
  );
 
 
@@ -63,15 +59,13 @@ CREATE TABLE songs (
     number     INTEGER,
     act_number INTEGER,
     show_id    INTEGER  NOT NULL    REFERENCES shows
-    ...
  );
 
 
 CREATE TABLE performers (
     performer_id INTEGER NOT NULL   PRIMARY KEY,
     name         TEXT,
-    bio          TEXT,
-    ...
+    bio          TEXT
 );
 
 CREATE TABLE performer_show_bridge (
@@ -102,7 +96,11 @@ An Advertiser will have multiple addvertisements.
 ##  SHOWS DATA RELATIONSHIP
 ### One-to-many data relationships
 Each show will have a number of songs/musical numbers.
+Each show will have a number of roles
 
 ### Many-to-many data relationship
 A show has multiple performers, and a performer can be in multiple shows
 
+##  PERFORMER DATA RELATIONSHIP
+### One-to-many data relationships
+A Performer will have many roles
