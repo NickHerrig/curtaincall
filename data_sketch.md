@@ -81,12 +81,6 @@ CREATE TABLE performer_show_bridge (
 );
 
 
-CREATE TABLE theaters (
-    theater_id INTEGER   NOT NULL   PRIMARY KEY,
-    theater_name,
-    ...
-);
-
 ```
 
 # Data Brain Dump V1.0
