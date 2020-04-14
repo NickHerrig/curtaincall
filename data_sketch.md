@@ -6,7 +6,7 @@ This is a draft sketch of the database model.
 Each show or event will have a number of songs/musical numbers.
 This relationship is a one-to-many data relationship where a show_id is a foriegn key for a song.
 
-'''
+```
 
 CREATE TABLE shows (
     show_id INTEGER  NOT NULL    PRIMARY KEY,
@@ -25,7 +25,7 @@ CREATE TABLE songs (
     ...
  );
 
-'''
+```
 
 ## THE CAST DATA MODEL (Many-to-many data relationship)
 Each Performer, _could_  be apart of multiple shows. 
@@ -35,7 +35,7 @@ In order for this relationship to be represented a link/bridge table is needed.
 This will link the shows table to the performers table with foreign keys.
 this uses the show_id from table above to bridge the performers.
 
-'''
+```
 
 CREATE TABLE performers (
     performer_id INTEGER NOT NULL   PRIMARY KEY,
@@ -50,13 +50,13 @@ CREATE TABLE performer_show_bridge (
     PRIMARY KEY ( performer_id, show_id )
 );
 
-'''
+```
 
 ## THE THEATER DATA MODEL (One-to-many data relationships)
 The theater data model has a few one-to-many relationships.
 One theater has many staff members, and many Advertisers.
 
-'''
+```
 
 CREATE TABLE theaters (
     theater_id INTEGER   NOT NULL   PRIMARY KEY,
@@ -64,8 +64,7 @@ CREATE TABLE theaters (
     ...
 );
 
-'''
-
+```
 
 ## THE THEATER DATA MODEL (Many-to-many data relationships)
 The theater data model has a few many-to-many relationships.
