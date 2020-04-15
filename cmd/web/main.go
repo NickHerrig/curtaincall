@@ -7,12 +7,15 @@ import (
     "net/http"
     "os"
 
+    "curtaincall.tech/pkg/models/sqlite"
+
     _ "github.com/mattn/go-sqlite3"
 )
 
 type application struct {
     errorLog *log.Logger
     infoLog  *log.Logger
+    theaters *sqlite.TheaterModel
 }
 
 func main() {
@@ -34,6 +37,7 @@ func main() {
     app := &application{
         errorLog: errorLog,
         infoLog:  infoLog,
+        theaters: &sqlite.TheaterModel{DB: db},
     }
 
     srv := &http.Server{

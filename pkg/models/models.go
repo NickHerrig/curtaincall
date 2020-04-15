@@ -1,11 +1,10 @@
-package main
+package models 
 
 import (
-    "erros"
-    "Time"
-) 
+    "errors"
+)
 
-ErrNoRecord = errors.New("models: no matching record found")
+var ErrNoRecord = errors.New("models: no matching record found")
 
 type Theater struct {
     ID      int
