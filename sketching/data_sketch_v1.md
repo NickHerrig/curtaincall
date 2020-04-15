@@ -15,7 +15,7 @@ CREATE TABLE theaters_shows_bridge (
 
 CREATE TABLE shows (
     show_id INTEGER  NOT NULL    PRIMARY KEY,
-    name    TEXT
+    name    TEXT,
     company TEXT
  );
 
@@ -36,12 +36,12 @@ CREATE TABLE performers (
 CREATE TABLE roles (
     role_id          INTEGER NOT NULL   PRIMARY KEY,
     name             TEXT,
-    order            INTEGER,
-    performer_id     INTEGER  NOT NULL    REFERENCES performers 
+    order_appearance INTEGER,
+    performer_id     INTEGER  NOT NULL    REFERENCES performers,
     show_id          INTEGER  NOT NULL    REFERENCES shows 
 );
 
-CREATE TABLE performer_show_bridge (
+CREATE TABLE performers_shows_bridge (
     performer_id INTEGER    NOT NULL    REFERENCES performers,
     show_id      INTEGER    NOT NULL    REFERENCES shows,
     PRIMARY KEY ( performer_id, show_id )
