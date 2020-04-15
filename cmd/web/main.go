@@ -19,16 +19,17 @@ func main() {
 
     addr := flag.String("addr", ":8080", "HTTP network address")
     dsn := flag.String("dsn", "./test.db", "Database data source name")
+    dr := flag.String("dr" ,"sqlite3", "The Database driver to use")
     flag.Parse()
 
     infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
     errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
-    database, err := sql.Open("sqlite3", *dsn)
+    db, err := openDB(*dr, *dsn)
     if err != nil {
-        errorLog.Fatal(err) 
+        errorLog.Fatal(err)
     }
-    defer database.Close()
+    defer db.Close()
 
     app := &application{
         errorLog: errorLog,
@@ -44,4 +45,15 @@ func main() {
     infoLog.Printf("Starting Curtain Call on port %s", *addr)
     err = srv.ListenAndServe()
     errorLog.Fatal(err)
+}
+
+func openDB(dr, dsn string) (*sql.DB, error) {
+    db, err := sql.Open(dr, dsn)
+    if err != nil {
+        return nil, err
+    }
+    if err = db.Ping(); err != nil {
+        return nil, err
+    }
+    return db, nil
 }
