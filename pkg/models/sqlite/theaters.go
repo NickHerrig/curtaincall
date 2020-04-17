@@ -2,6 +2,7 @@ package sqlite
 
 import (
     "database/sql"
+    "errors"
 
     "curtaincall.tech/pkg/models"
 )
@@ -26,5 +27,18 @@ func (m *TheaterModel) Insert(name string) (int, error) {
 }
 
 func (m *TheaterModel) Get(id int) (*models.Theater, error) {
-    return nil, nil
+    stmt := `SELECT theater_id, name FROM theaters WHERE theater_id = ?`
+
+    row := m.DB.QueryRow(stmt, id)
+    s := &models.Theater{}
+
+    err := row.Scan(&s.ID, &s.Name)
+    if err != nil {
+        if errors.Is(err, sql.ErrNoRows) {
+            return nil, models.ErrNoRecord
+        } else {
+            return nil, err
+        }
+    }
+    return s, nil
 }

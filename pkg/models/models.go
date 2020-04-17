@@ -8,18 +8,18 @@ var ErrNoRecord = errors.New("models: no matching record found")
 
 type Theater struct {
     ID      int
-    name    string
+    Name    string
 }
 
 type Show struct {
     ID      int
-    name    string
-    company string
+    Name    string
+    Company string
 }
 
 type Song struct {
     ID          int
-    name        string
-    number      int
-    actNumber   int
+    Name        string
+    Number      int
+    ActNumber   int
 }
