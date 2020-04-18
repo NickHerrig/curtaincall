@@ -11,6 +11,33 @@ type TheaterModel struct {
     DB *sql.DB
 }
 
+func (m *TheaterModel) Latest() ([]*models.Theater, error) {
+    stmt := `SELECT theater_id, name FROM theaters
+             ORDER BY theater_id ASC LIMIT 5`
+
+    rows, err := m.DB.Query(stmt)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    theaters := []*models.Theater{}
+
+    for rows.Next() {
+        s := &models.Theater{}
+        err = rows.Scan(&s.ID, &s.Name)
+        if err != nil {
+            return nil, err
+        }
+        theaters = append(theaters, s)
+    }
+    if err = rows.Err(); err != nil {
+        return nil, err
+    }
+
+    return theaters, nil
+}
+
 func (m *TheaterModel) Insert(name string) (int, error) {
     stmt := `INSERT INTO theaters (name) VALUES (?)`
 

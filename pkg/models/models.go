@@ -23,3 +23,15 @@ type Song struct {
     Number      int
     ActNumber   int
 }
+
+type Performer struct {
+    ID          int
+    Name        string
+    Bio         string
+}
+
+type Role struct {
+    ID          int
+    Name        string
+    Order       int
+}
