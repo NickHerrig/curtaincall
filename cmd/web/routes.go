@@ -1,16 +1,23 @@
 package main
 
-import "net/http"
+import (
+    "net/http"
 
-func (app *application) routes() *http.ServeMux {
+    "github.com/bmizerany/pat"
+)
 
-    mux := http.NewServeMux()
-    mux.HandleFunc("/", app.home)
-    mux.HandleFunc("/theater", app.showTheater)
-    mux.HandleFunc("/theater/create", app.createTheater)
+func (app *application) routes() http.Handler {
+
+    mux := pat.New()
+
+    mux.Get("/", http.HandlerFunc(app.home))
+
+    mux.Get("/theater/create", http.HandlerFunc(app.createTheaterForm))
+    mux.Post("/theater/create", http.HandlerFunc(app.createTheater))
+    mux.Get("/theater/:id", http.HandlerFunc(app.showTheater))
 
     fileServer := http.FileServer(http.Dir("./ui/static/"))
-    mux.Handle("/static/", http.StripPrefix("/static", fileServer))
+    mux.Get("/static/", http.StripPrefix("/static", fileServer))
 
     return mux
 }
