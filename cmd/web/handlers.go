@@ -3,7 +3,6 @@ package main
 import (
     "errors"
     "fmt"
-    "html/template"
     "net/http"
     "strconv"
 
@@ -19,23 +18,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
     }
 
     data := &templateData{Theaters: t}
-
-    files := []string{
-        "./ui/html/home.page.tmpl",
-        "./ui/html/base.layout.tmpl",
-        "./ui/html/footer.partial.tmpl",
-    }
-
-    ts, err := template.ParseFiles(files...)
-    if err != nil {
-        app.serverError(w, err)
-        return
-    }
-
-    err = ts.Execute(w, data)
-    if err != nil {
-        app.serverError(w, err)
-    }
+    app.render(w, r, "home.page.tmpl", data)
 }
 
 func (app *application) showTheater(w http.ResponseWriter, r *http.Request) {
@@ -58,22 +41,8 @@ func (app *application) showTheater(w http.ResponseWriter, r *http.Request) {
 
     data := &templateData{Theater: t}
 
-    files := []string{
-        "./ui/html/show.page.tmpl",
-        "./ui/html/base.layout.tmpl",
-        "./ui/html/footer.partial.tmpl",
-    }
+    app.render(w, r, "show.page.tmpl", data)
 
-    ts, err := template.ParseFiles(files...)
-    if err != nil {
-        app.serverError(w, err)
-        return
-    }
-
-    err = ts.Execute(w, data)
-    if err != nil {
-        app.serverError(w, err)
-    }
 }
 
 func (app *application) createTheaterForm(w http.ResponseWriter, r *http.Request) {
