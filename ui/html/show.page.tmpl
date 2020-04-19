@@ -1,14 +1,22 @@
 {{template "base" .}}
 
-{{define "title"}}Theater - {{.Name}}{{end}}
+{{define "title"}}Theater - {{.Theater.Name}}{{end}}
 
 {{define "main"}}
 
 <hr>
     <section>
         <header>
-            <h2>{{.Name}}-{{.ID}}</h2>
+            <h2>{{.Theater.Name}}-{{.Theater.ID}}</h2>
         </header>
+            <aside>
+                <h3>Hamilton</h3>
+            </aside>
+            <aside>
+                <h3>Dear Evan Hansen</h3>
+            </aside>
+        </section>
+
     </section>
 </hr>
 

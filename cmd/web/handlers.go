@@ -48,7 +48,7 @@ func (app *application) showTheater(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    s, err := app.theaters.Get(id)
+    t, err := app.theaters.Get(id)
     if err != nil {
         if errors.Is(err, models.ErrNoRecord) {
             app.notFound(w)
@@ -57,6 +57,8 @@ func (app *application) showTheater(w http.ResponseWriter, r *http.Request) {
         }
         return
     }
+
+    data := &templateData{Theater: t}
 
     files := []string{
         "./ui/html/show.page.tmpl",
@@ -70,7 +72,7 @@ func (app *application) showTheater(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    err = ts.Execute(w, s)
+    err = ts.Execute(w, data)
     if err != nil {
         app.serverError(w, err)
     }
