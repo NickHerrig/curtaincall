@@ -3,5 +3,6 @@ package main
 import "curtaincall.tech/pkg/models"
 
 type templateData struct {
-    Theater *models.Theater
+    Theater  *models.Theater
+    Theaters []*models.Theater
 }

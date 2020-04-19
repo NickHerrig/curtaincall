@@ -3,7 +3,21 @@
 {{define "title"}}Home{{end}}
 
 {{define "main"}}
-<h2>Theaters</h2>
-<p>There is nothing to see here yet!</p>
+<hr>
+    <section>
+        <header>
+            <h2>Theaters</h2>
+        </header>
+        {{if .Theaters}}
+        {{range .Theaters}}
+            <aside>
+                <h3>{{.Name}}</h3>
+            </aside>
+        {{end}}
+        {{else}}
+            <p>No Theaters have playbills yet.</p>
+        {{end}}
+    </section>
+</hr>
 {{end}}
 

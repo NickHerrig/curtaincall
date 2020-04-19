@@ -12,32 +12,30 @@ import (
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 
-    s, err := app.theaters.Latest()
+    t, err := app.theaters.Latest()
     if err != nil {
         app.serverError(w, err)
         return
     }
 
-    for _, theater := range s {
-        fmt.Fprintf(w, "%v\n", theater)
+    data := &templateData{Theaters: t}
+
+    files := []string{
+        "./ui/html/home.page.tmpl",
+        "./ui/html/base.layout.tmpl",
+        "./ui/html/footer.partial.tmpl",
     }
 
-//    files := []string{
-//        "./ui/html/home.page.tmpl",
-//        "./ui/html/base.layout.tmpl",
-//        "./ui/html/footer.partial.tmpl",
-//    }
-//
-//    ts, err := template.ParseFiles(files...)
-//    if err != nil {
-//        app.serverError(w, err)
-//        return
-//    }
-//
-//    err = ts.Execute(w, nil)
-//    if err != nil {
-//        app.serverError(w, err)
-//    }
+    ts, err := template.ParseFiles(files...)
+    if err != nil {
+        app.serverError(w, err)
+        return
+    }
+
+    err = ts.Execute(w, data)
+    if err != nil {
+        app.serverError(w, err)
+    }
 }
 
 func (app *application) showTheater(w http.ResponseWriter, r *http.Request) {
