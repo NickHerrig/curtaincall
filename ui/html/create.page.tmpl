@@ -1,0 +1,16 @@
+{{template "base" .}}
+
+{{define "title"}}Create a Theater{{end}}
+
+{{define "main"}}
+
+<form action="/theater/create" method="POST">
+    <div>
+        <label>Theater:</label>
+        <input type="text" name="name">
+    </div>
+    <div>
+        <input type="submit" value="Publish Theater">
+    </div>
+</form>
+{{end}}

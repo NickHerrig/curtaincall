@@ -46,13 +46,19 @@ func (app *application) showTheater(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) createTheaterForm(w http.ResponseWriter, r *http.Request) {
-    w.Write([]byte("Create a new snippet....FORMMMMM"))
+    app.render(w, r, "create.page.tmpl", nil)
 
 }
 
 func (app *application) createTheater(w http.ResponseWriter, r *http.Request) {
 
-    name := "The Fabulous Fox Theater"
+    err := r.ParseForm()
+    if err != nil {
+        app.clientError(w, http.StatusBadRequest)
+        return
+    }
+
+    name := r.PostForm.Get("name")
 
     id, err := app.theaters.Insert(name)
     if err != nil {
