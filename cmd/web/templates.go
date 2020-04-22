@@ -4,12 +4,14 @@ import (
     "html/template"
     "path/filepath"
 
+    "curtaincall.tech/pkg/forms"
     "curtaincall.tech/pkg/models"
 )
 
 type templateData struct {
-    Theater  *models.Theater
-    Theaters []*models.Theater
+    Form       *forms.Form
+    Theater    *models.Theater
+    Theaters   []*models.Theater
 }
 
 func newTemplateCache(dir string) (map[string]*template.Template, error) {

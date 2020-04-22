@@ -4,13 +4,18 @@
 
 {{define "main"}}
 
-<form action="/theater/create" method="POST">
-    <div>
-        <label>Theater:</label>
-        <input type="text" name="name">
-    </div>
-    <div>
-        <input type="submit" value="Publish Theater">
-    </div>
+<form action='/theater/create' method='POST'>
+    {{with .Form}}
+        <div>
+            <label>Theater:</label>
+            {{with .Errors.Get "name"}}
+                <label class='error'>{{.}}</label>
+            {{end}}
+            <input type='text' name='name' value='{{.Get "name"}}'>
+        </div>
+        <div>
+            <input type='submit' value='Publish Theater'>
+        </div>
+    {{end}}
 </form>
 {{end}}

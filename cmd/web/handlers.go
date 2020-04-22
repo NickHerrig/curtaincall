@@ -6,6 +6,7 @@ import (
     "net/http"
     "strconv"
 
+    "curtaincall.tech/pkg/forms"
     "curtaincall.tech/pkg/models"
 )
 
@@ -46,7 +47,9 @@ func (app *application) showTheater(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) createTheaterForm(w http.ResponseWriter, r *http.Request) {
-    app.render(w, r, "create.page.tmpl", nil)
+    app.render(w, r, "create.page.tmpl", &templateData{
+        Form: forms.New(nil),
+    })
 
 }
 
@@ -58,9 +61,15 @@ func (app *application) createTheater(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    name := r.PostForm.Get("name")
+    form := forms.New(r.PostForm)
+    form.Required("name")
 
-    id, err := app.theaters.Insert(name)
+    if !form.Valid() {
+        app.render(w, r, "create.page.tmpl", &templateData{Form: form})
+        return
+    }
+
+    id, err := app.theaters.Insert(form.Get("name"))
     if err != nil {
         app.serverError(w, err)
     }
