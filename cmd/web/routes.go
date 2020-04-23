@@ -13,12 +13,16 @@ func (app *application) routes() http.Handler {
     dynamicMiddleware := alice.New(app.session.Enable)
 
     mux := pat.New()
-
     mux.Get("/", dynamicMiddleware.ThenFunc(app.home))
-
     mux.Get("/theater/create", dynamicMiddleware.ThenFunc(app.createTheaterForm))
     mux.Post("/theater/create", dynamicMiddleware.ThenFunc(app.createTheater))
     mux.Get("/theater/:id", dynamicMiddleware.ThenFunc(app.showTheater))
+
+    mux.Get("/user/signup", dynamicMiddleware.ThenFunc(app.signupUserForm))
+    mux.Post("/user/signup", dynamicMiddleware.ThenFunc(app.signupUser))
+    mux.Get("/user/login", dynamicMiddleware.ThenFunc(app.loginUserForm))
+    mux.Post("/user/login", dynamicMiddleware.ThenFunc(app.loginUser))
+    mux.Post("/user/logout", dynamicMiddleware.ThenFunc(app.logoutUser))
 
     fileServer := http.FileServer(http.Dir("./ui/static/"))
     mux.Get("/static/", http.StripPrefix("/static", fileServer))
