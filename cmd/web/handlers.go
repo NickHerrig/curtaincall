@@ -40,9 +40,9 @@ func (app *application) showTheater(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    data := &templateData{Theater: t}
-
-    app.render(w, r, "show.page.tmpl", data)
+    app.render(w, r, "show.page.tmpl", &templateData{
+        Theater: t,
+    })
 
 }
 
@@ -73,6 +73,8 @@ func (app *application) createTheater(w http.ResponseWriter, r *http.Request) {
     if err != nil {
         app.serverError(w, err)
     }
+
+    app.session.Put(r, "flash", "Theater successfully created!")
 
     http.Redirect(w, r, fmt.Sprintf("/theater/%d", id), http.StatusSeeOther)
 }

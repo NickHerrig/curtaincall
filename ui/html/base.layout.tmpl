@@ -1,14 +1,14 @@
 {{define "base"}}
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 
 <head>
-    <link rel="shortcut icon" href="/static/img/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel='shortcut icon' href='/static/img/favicon.png' type='image/x-icon'>
+    <link rel='stylesheet' href='/static/css/main.css'>
 
-    <meta charset="utf-8">
-    <meta name="description" content="Experience Theater">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset='utf-8'>
+    <meta name='description' content='Experience Theater'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
 
     <title>{{template "title" .}} - Curtain Call</title>
 </head>
@@ -16,14 +16,17 @@
 <body>
     <header>
         <nav>
-            <a href="/"><img alt="Logo" src="/static/img/logo_transparent.png" height="70"></a>
-            <a href="/">Home</a>
+            <a href='/'><img alt='Logo' src='/static/img/logo_transparent.png' height='70'></a>
+            <a href='/'>Home</a>
         </nav>
         <h1>Welcome to Curtain Call!</h1>
         <p>We hope you enjoy the show</p>
         <br>
     </header>
     <main>
+        {{with .Flash}}
+        <div class='flash '>{{.}}</div>
+        {{end}}
         {{template "main" .}}   
     </main>
     {{template "footer" .}} 

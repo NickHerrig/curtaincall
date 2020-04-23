@@ -9,9 +9,11 @@ import (
 )
 
 type templateData struct {
-    Form       *forms.Form
-    Theater    *models.Theater
-    Theaters   []*models.Theater
+    CurrentYear int
+    Flash       string
+    Form        *forms.Form
+    Theater     *models.Theater
+    Theaters    []*models.Theater
 }
 
 func newTemplateCache(dir string) (map[string]*template.Template, error) {
