@@ -78,3 +78,23 @@ func (app *application) createTheater(w http.ResponseWriter, r *http.Request) {
 
     http.Redirect(w, r, fmt.Sprintf("/theater/%d", id), http.StatusSeeOther)
 }
+
+func (app *application) signupUserForm(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintln(w, "GET: Display user signup form.")
+}
+
+func (app *application) signupUser(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintln(w, "POST: Signup User.")
+}
+
+func (app *application) loginUserForm(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintln(w, "GET: Display user login form.")
+}
+
+func (app *application) loginUser(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintln(w, "POST: Login user.")
+}
+
+func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintln(w, "POST: Logout the user.")
+}
