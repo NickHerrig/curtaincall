@@ -52,3 +52,6 @@ VALUES ("Alexander Hamilton", 1, 1, 1);
 
 INSERT INTO roles (name, order_appearance , performer_id, show_id) 
 VALUES ("Evan Hansen", 7, 2, 2);
+
+INSERT INTO users (name, email, hashed_password, created)
+VALUES ("nick", "neherrig@gmail.com", "aoskdjf;lkasdjflkasjf", "2014-10-23 15:21:07");

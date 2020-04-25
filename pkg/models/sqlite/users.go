@@ -4,6 +4,9 @@ import (
     "database/sql"
 
     "curtaincall.tech/pkg/models"
+
+    "github.com/mattn/go-sqlite3"
+    "golang.org/x/crypto/bcrypt"
 )
 
 type UserModel struct {
@@ -11,7 +14,23 @@ type UserModel struct {
 }
 
 
-func (m *UserModel) Insert(name string) error {
+func (m *UserModel) Insert(name, email, password string) error {
+    hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
+    if err != nil {
+        return err
+    }
+    stmt := `INSERT INTO users (name, email, hashed_password, created)
+             VALUES (?, ?, ?, datetime("now"))`
+
+    _, err = m.DB.Exec(stmt, name, email, string(hashedPassword))
+    if err != nil {
+        if SqliteError, ok := err.(sqlite3.Error); ok {
+            if SqliteError.Code == sqlite3.ErrConstraint {
+                return models.ErrDuplicateEmail
+            }
+        }
+        return err
+    }
     return nil
 }
 
