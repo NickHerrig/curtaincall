@@ -22,6 +22,7 @@ type application struct {
     session       *sessions.Session
     theaters      *sqlite.TheaterModel
     templateCache map[string]*template.Template
+    users         *sqlite.UserModel
 }
 
 func main() {
@@ -56,6 +57,7 @@ func main() {
         session:       session,
         theaters:      &sqlite.TheaterModel{DB: db},
         templateCache: templateCache,
+        users:         &sqlite.UserModel{DB: db},
     }
 
     tlsConfig := &tls.Config{

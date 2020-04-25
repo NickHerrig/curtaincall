@@ -5,7 +5,6 @@ CREATE TABLE theaters (
     theater_id INTEGER   NOT NULL   PRIMARY KEY,
     name       TEXT
 );
-
 CREATE TABLE theaters_shows_bridge (
     theater_id   INTEGER    NOT NULL    REFERENCES theaters,
     show_id      INTEGER    NOT NULL    REFERENCES shows,
@@ -46,6 +45,15 @@ CREATE TABLE performers_shows_bridge (
     show_id      INTEGER    NOT NULL    REFERENCES shows,
     PRIMARY KEY ( performer_id, show_id )
 );
+
+CREATE TABLE users (
+    user_id INTEGER NOT NULL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    hashed_password CHAR(60) NOT NULL,
+    created DATETIME NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT TRUE
+)
 
 
 ```
