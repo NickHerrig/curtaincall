@@ -4,6 +4,8 @@ github.com/golangcollege/sessions v1.2.0 h1:2aD9jac/N8NC/y+NEoirYMGlYymzS0ZQN6AS
 github.com/golangcollege/sessions v1.2.0/go.mod h1:7iTf/FrZku0hWyjV95lES7abH89WBlyBjPyA1htnuks=
 github.com/justinas/alice v1.2.0 h1:+MHSA/vccVCF4Uq37S42jwlkvI2Xzl7zTPCN5BnZNVo=
 github.com/justinas/alice v1.2.0/go.mod h1:fN5HRH/reO/zrUflLfTN43t3vXvKzvZIENsNEe7i7qA=
+github.com/justinas/nosurf v1.1.0 h1:qqV6FJmnDBJ6F9pOzhZgZitAZWBYonMOXglof7TtdZw=
+github.com/justinas/nosurf v1.1.0/go.mod h1:ALpWdSbuNGy2lZWtyXdjkYv4edL23oSEgfBT1gPJ5BQ=
 github.com/mattn/go-sqlite3 v1.13.0 h1:LnJI81JidiW9r7pS/hXe6cFeO5EXNq7KbfvoJLRI69c=
 github.com/mattn/go-sqlite3 v2.0.3+incompatible h1:gXHsfypPkaMZrKbD5209QV9jbUTJKjyR5WD3HYQSd+U=
 github.com/mattn/go-sqlite3 v2.0.3+incompatible/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=

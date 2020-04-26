@@ -5,6 +5,7 @@
 {{define "main"}}
 
 <form action='/theater/create' method='POST'>
+    <input type='hidden' name='csrf_token' value='{{.CSRFToken}}'>
     {{with .Form}}
         <div>
             <label>Theater:</label>
