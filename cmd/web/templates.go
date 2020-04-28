@@ -3,6 +3,7 @@ package main
 import (
     "html/template"
     "path/filepath"
+    "time"
 
     "curtaincall.tech/pkg/forms"
     "curtaincall.tech/pkg/models"
@@ -18,6 +19,14 @@ type templateData struct {
     Theaters        []*models.Theater
 }
 
+func humanDate(t time.Time) string {
+    return t.Format("02 Jan 2006 at 15:04")
+}
+
+var functions = template.FuncMap{
+    "humanDate": humanDate,
+}
+
 func newTemplateCache(dir string) (map[string]*template.Template, error) {
     cache := map[string]*template.Template{}
 
@@ -29,8 +38,8 @@ func newTemplateCache(dir string) (map[string]*template.Template, error) {
     for _, page := range pages {
         name := filepath.Base(page)
 
-        ts, err := template.ParseFiles(page)
-        if err != nil {
+        ts, err := template.New(name).Funcs(functions).ParseFiles(page)
+        if err !=  nil {
             return nil, err
         }
 
