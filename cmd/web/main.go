@@ -10,6 +10,7 @@ import (
     "os"
     "time"
 
+    "curtaincall.tech/pkg/models"
     "curtaincall.tech/pkg/models/sqlite"
 
     _ "github.com/mattn/go-sqlite3"
@@ -24,9 +25,17 @@ type application struct {
     errorLog      *log.Logger
     infoLog       *log.Logger
     session       *sessions.Session
-    theaters      *sqlite.TheaterModel
+    theaters interface {
+      Insert(string) (int, error)
+      Get(int) (*models.Theater, error)
+      Latest() ([]*models.Theater, error)
+    }
     templateCache map[string]*template.Template
-    users         *sqlite.UserModel
+    users interface {
+      Insert(string, string, string) error
+      Authenticate(string, string) (int, error)
+      Get(int) (*models.User, error)
+    }
 }
 
 func main() {
