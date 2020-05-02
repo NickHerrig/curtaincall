@@ -1,0 +1,25 @@
+{{template "base" .}}
+
+{{define "title"}}Theater - {{.Theater.Name}}{{end}}
+
+{{define "main"}}
+
+<hr>
+    <section>
+        <header>
+            <h2>{{.Theater.Name}}</h2>
+        </header>
+        {{if .Shows}}
+        {{range .Shows}}
+            <aside>
+                <h3>{{.Name}}</h3>
+                <h5>{{.Company}}</h5>
+            </aside>
+        {{end}}
+        {{else}}
+            <p>There are no Shows yet!</p>
+        {{end}}
+    </section>
+</hr>
+
+{{end}}

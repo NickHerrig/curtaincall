@@ -3,13 +3,9 @@
 <html lang='en'>
 
 <head>
-    <link rel='shortcut icon' href='/static/img/favicon.png' type='image/x-icon'>
-    <link rel='stylesheet' href='/static/css/main.css'>
-
     <meta charset='utf-8'>
     <meta name='description' content='Experience Theater'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-
     <title>{{template "title" .}} - Curtain Call</title>
 </head>
 
@@ -18,7 +14,7 @@
         <nav>
             <a href='/'><img alt='Logo' src='/static/img/logo_transparent.png' height='70'></a>
             {{if .IsAuthenticated}}
-                <a href='theater/create'>Create Theater</a>
+                <a href='/theater/create'>Create Theater</a>
             {{end}}
             <div style='text-align:right'>
             {{if .IsAuthenticated}}

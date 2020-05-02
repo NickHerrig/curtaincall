@@ -11,7 +11,7 @@
         {{if .Theaters}}
         {{range .Theaters}}
             <aside>
-                <h3>{{.Name}}</h3>
+                <h3><a href=/theater/{{.ID}}>{{.Name}}<a></h3>
             </aside>
         {{end}}
         {{else}}
