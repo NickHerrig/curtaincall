@@ -15,6 +15,8 @@ type templateData struct {
     Flash           string
     Form            *forms.Form
     IsAuthenticated bool
+    Show            *models.Show
+    Shows           []*models.Show
     Theater         *models.Theater
     Theaters        []*models.Theater
 }

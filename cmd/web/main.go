@@ -25,6 +25,9 @@ type application struct {
     errorLog      *log.Logger
     infoLog       *log.Logger
     session       *sessions.Session
+    shows interface {
+      Latest() ([]*models.Show, error)
+    }
     theaters interface {
       Insert(string) (int, error)
       Get(int) (*models.Theater, error)
@@ -69,6 +72,7 @@ func main() {
         errorLog:      errorLog,
         infoLog:       infoLog,
         session:       session,
+        shows:         &sqlite.ShowModel{DB: db},
         theaters:      &sqlite.TheaterModel{DB: db},
         templateCache: templateCache,
         users:         &sqlite.UserModel{DB: db},

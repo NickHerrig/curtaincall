@@ -40,14 +40,22 @@ func (app *application) showTheater(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    app.render(w, r, "show.page.tmpl", &templateData{
+
+    s, err := app.shows.Latest()
+    if err != nil {
+        app.serverError(w, err)
+        return
+    }
+
+    app.render(w, r, "show.theater.page.tmpl", &templateData{
         Theater: t,
+        Shows:   s,
     })
 
 }
 
 func (app *application) createTheaterForm(w http.ResponseWriter, r *http.Request) {
-    app.render(w, r, "create.page.tmpl", &templateData{
+    app.render(w, r, "create.theater.page.tmpl", &templateData{
         Form: forms.New(nil),
     })
 
