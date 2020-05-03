@@ -10,11 +10,13 @@ type ShowModel struct {
     DB *sql.DB
 }
 
-func (m *ShowModel) Latest() ([]*models.Show, error) {
-    stmt := `SELECT show_id, name, company FROM shows
-             ORDER BY show_id ASC LIMIT 4`
+func (m *ShowModel) Latest(id int) ([]*models.Show, error) {
+    stmt := `SELECT shows.show_id, shows.name, shows.company 
+             FROM theaters JOIN theaters_shows_bridge USING ( theater_id )
+             JOIN shows USING ( show_id )
+             WHERE theaters.theater_id = ?`
 
-    rows, err := m.DB.Query(stmt)
+    rows, err := m.DB.Query(stmt, id)
     if err != nil {
         return nil, err
     }

@@ -41,7 +41,7 @@ func (app *application) showTheater(w http.ResponseWriter, r *http.Request) {
     }
 
 
-    s, err := app.shows.Latest()
+    s, err := app.shows.Latest(id)
     if err != nil {
         app.serverError(w, err)
         return

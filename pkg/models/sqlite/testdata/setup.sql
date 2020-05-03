@@ -24,10 +24,23 @@ CREATE TABLE theaters_shows_bridge (
     PRIMARY KEY ( theater_id, show_id )
 );
 
-
 INSERT INTO theaters (name)
 VALUES ("Des Moines Civic Center");
 
+INSERT INTO theaters (name)
+VALUES ("The Fabulous Fox");
+
+INSERT INTO shows (name, company)
+VALUES ("Hamilton", "Company A");
+
+INSERT INTO shows (name, company)
+VALUES ("Dear Evan Hansen", "Company B");
+
+INSERT INTO theaters_shows_bridge (theater_id, show_id)
+VALUES (1,1);
+
+INSERT INTO theaters_shows_bridge (theater_id, show_id)
+VALUES (2,2);
 
 INSERT INTO users (name, email, hashed_password, created) VALUES (
     "nick", 
@@ -35,7 +48,3 @@ INSERT INTO users (name, email, hashed_password, created) VALUES (
     "aoskdjf;lkasdjflkasjf",
     "2018-12-23 17:25:22"
 );
-
-
-INSERT INTO shows (name, company)
-VALUES ("Hamilton", "Company A");

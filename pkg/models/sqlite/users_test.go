@@ -63,5 +63,3 @@ func TestUserModelGet(t *testing.T) {
         })
     }
 }
-
-
