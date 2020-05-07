@@ -2,6 +2,7 @@ package sqlite
 
 import (
     "database/sql"
+    "errors"
 
     "curtaincall.tech/pkg/models"
 )
@@ -37,4 +38,21 @@ func (m *ShowModel) Latest(id int) ([]*models.Show, error) {
     }
 
     return shows, nil
+}
+
+func (m *ShowModel) Get(id int) (*models.Show, error) {
+    stmt := `SELECT show_id, name, company FROM shows WHERE show_id = ?`
+
+    row := m.DB.QueryRow(stmt, id)
+    s := &models.Show{}
+
+    err := row.Scan(&s.ID, &s.Name, &s.Company)
+    if err != nil {
+        if errors.Is(err, sql.ErrNoRows) {
+            return nil, models.ErrNoRecord
+        } else {
+            return nil, err
+        }
+    }
+    return s, nil
 }

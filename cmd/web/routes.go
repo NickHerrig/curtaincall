@@ -14,9 +14,12 @@ func (app *application) routes() http.Handler {
 
     mux := pat.New()
     mux.Get("/", dynamicMiddleware.ThenFunc(app.home))
+
     mux.Get("/theater/create", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.createTheaterForm))
     mux.Post("/theater/create", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.createTheater))
     mux.Get("/theater/:id", dynamicMiddleware.ThenFunc(app.showTheater))
+
+    mux.Get("/show/:id", dynamicMiddleware.ThenFunc(app.showShow))
 
     mux.Get("/user/signup", dynamicMiddleware.ThenFunc(app.signupUserForm))
     mux.Post("/user/signup", dynamicMiddleware.ThenFunc(app.signupUser))
@@ -25,6 +28,8 @@ func (app *application) routes() http.Handler {
     mux.Post("/user/logout", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.logoutUser))
 
     mux.Get("/ping", http.HandlerFunc(ping))
+
+    mux.Get("/html", dynamicMiddleware.ThenFunc(app.html)) // a route for testing some html learnings
 
     fileServer := http.FileServer(http.Dir("./ui/static/"))
     mux.Get("/static/", http.StripPrefix("/static", fileServer))

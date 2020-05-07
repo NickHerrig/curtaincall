@@ -22,6 +22,12 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
     app.render(w, r, "home.page.tmpl", data)
 }
 
+func (app *application) html(w http.ResponseWriter, r *http.Request) {
+
+    data := &templateData{}
+    app.render(w, r, "html.page.tmpl", data)
+}
+
 func (app *application) showTheater(w http.ResponseWriter, r *http.Request) {
 
     id, err := strconv.Atoi(r.URL.Query().Get(":id"))
@@ -39,7 +45,6 @@ func (app *application) showTheater(w http.ResponseWriter, r *http.Request) {
         }
         return
     }
-
 
     s, err := app.shows.Latest(id)
     if err != nil {
@@ -85,6 +90,30 @@ func (app *application) createTheater(w http.ResponseWriter, r *http.Request) {
     app.session.Put(r, "flash", "Theater successfully created!")
 
     http.Redirect(w, r, fmt.Sprintf("/theater/%d", id), http.StatusSeeOther)
+}
+
+func (app *application) showShow(w http.ResponseWriter, r *http.Request) {
+
+    id, err := strconv.Atoi(r.URL.Query().Get(":id"))
+    if err != nil || id < 1 {
+        app.notFound(w)
+        return
+    }
+
+    s, err := app.shows.Get(id)
+    if err != nil {
+        if errors.Is(err, models.ErrNoRecord) {
+            app.notFound(w)
+        } else {
+            app.serverError(w, err)
+        }
+        return
+    }
+
+    app.render(w, r, "show.show.page.tmpl", &templateData{
+        Show:   s,
+    })
+
 }
 
 func (app *application) signupUserForm(w http.ResponseWriter, r *http.Request) {

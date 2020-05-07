@@ -26,6 +26,7 @@ type application struct {
     infoLog       *log.Logger
     session       *sessions.Session
     shows interface {
+      Get(int) (*models.Show, error)
       Latest(int) ([]*models.Show, error)
     }
     theaters interface {
