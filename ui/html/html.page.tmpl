@@ -1,0 +1,14 @@
+{{template "base" .}}
+
+{{define "title"}}Login{{end}}
+
+{{define "main"}}
+
+<form action="/subscribe" method="post">
+  <p>Subscribe for the latest news!</p>
+  <input type="text" name="email"/>
+  <input type="submit" name="subscribe" value="Subscribe" />
+</form>
+<br />
+
+{{end}}
