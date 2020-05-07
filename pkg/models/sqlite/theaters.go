@@ -24,12 +24,12 @@ func (m *TheaterModel) Latest() ([]*models.Theater, error) {
     theaters := []*models.Theater{}
 
     for rows.Next() {
-        s := &models.Theater{}
-        err = rows.Scan(&s.ID, &s.Name)
+        t := &models.Theater{}
+        err = rows.Scan(&t.ID, &t.Name)
         if err != nil {
             return nil, err
         }
-        theaters = append(theaters, s)
+        theaters = append(theaters, t)
     }
     if err = rows.Err(); err != nil {
         return nil, err
@@ -57,9 +57,9 @@ func (m *TheaterModel) Get(id int) (*models.Theater, error) {
     stmt := `SELECT theater_id, name FROM theaters WHERE theater_id = ?`
 
     row := m.DB.QueryRow(stmt, id)
-    s := &models.Theater{}
+    t := &models.Theater{}
 
-    err := row.Scan(&s.ID, &s.Name)
+    err := row.Scan(&t.ID, &t.Name)
     if err != nil {
         if errors.Is(err, sql.ErrNoRows) {
             return nil, models.ErrNoRecord
@@ -67,5 +67,5 @@ func (m *TheaterModel) Get(id int) (*models.Theater, error) {
             return nil, err
         }
     }
-    return s, nil
+    return t, nil
 }
