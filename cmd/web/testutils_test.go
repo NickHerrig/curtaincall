@@ -44,6 +44,7 @@ func newTestApplication(t *testing.T) *application {
         session:       session,
         theaters:      &mock.TheaterModel{},
         templateCache: templateCache,
+        shows:         &mock.ShowModel{},
         users:         &mock.UserModel{},
     }
 }

@@ -51,7 +51,7 @@ func TestShowTheater(t *testing.T) {
                 t.Errorf("want %d; got %d", tt.wantCode, code)
             }
             if !bytes.Contains(body, tt.wantBody) {
-                t.Errorf("want %d; got %d", tt.wantBody, body)
+                t.Errorf("want %s; got %s", string(tt.wantBody), string(body))
             }
         })
     }
