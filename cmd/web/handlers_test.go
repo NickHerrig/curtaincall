@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"net/http"
-	"net/url"
 	"testing"
 )
 

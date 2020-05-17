@@ -1,20 +1,13 @@
 package main
 
 import (
-	"html"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"net/http/cookiejar"
 	"net/http/httptest"
-	"net/url"
-	"regexp"
 	"testing"
-	"time"
 
 	"curtaincall.tech/pkg/models/mock"
-
-	"github.com/golangcollege/sessions"
 )
 
 func newTestApplication(t *testing.T) *application {
