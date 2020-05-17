@@ -33,5 +33,5 @@ jobs:
         host: ${{ secrets.CURTAINCALL_HOSTNAME }}
         username: ${{ secrets.CURTAINCALL_SSH_USER }}
         key: ${{ secrets.CURTAINCALL_SSH_KEY }}
-        source: curtaincall,web/*
+        source: web/*
         target: /home/${{ secrets.CURTAINCALL_SSH_USER }}/
