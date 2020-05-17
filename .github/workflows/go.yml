@@ -34,4 +34,4 @@ jobs:
         username: ${{ secrets.CURTAINCALL_SSH_USER }}
         key: ${{ secrets.CURTAINCALL_SSH_KEY }}
         source: curtaincall,web/*
-        target: /home/${{ secrets.JAMQL_SSH_USER }}/
+        target: /home/${{ secrets.CURTAINCALL_SSH_USER }}/
