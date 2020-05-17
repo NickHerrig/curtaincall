@@ -113,7 +113,7 @@ func main() {
 		}
 
 		log.Println("Listening on curtaincall.tech:443...")
-		log.Fatal(s.ServeTLS(httpsListener, "", ""))
+		log.Fatal(srv.ServeTLS(httpsListener, "", ""))
 
 	} else {
 
