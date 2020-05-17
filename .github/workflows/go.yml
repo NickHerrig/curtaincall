@@ -33,7 +33,8 @@ jobs:
         host: ${{ secrets.CC_HOSTNAME }}
         username: ${{ secrets.CC_SSH_USER }}
         key: ${{ secrets.CC_SSH_KEY }}
-        source: curtaincall,web/*
+        source: ui/*
+        strip_components: 1
         target: /home/${{ secrets.CC_SSH_USER }}/
 
     - uses: appleboy/ssh-action@master
