@@ -9,11 +9,11 @@ import (
 )
 
 type templateData struct {
-	CurrentYear     int
-	Show            *models.Show
-	Shows           []*models.Show
-	Theater         *models.Theater
-	Theaters        []*models.Theater
+	CurrentYear int
+	Show        *models.Show
+	Shows       []*models.Show
+	Theater     *models.Theater
+	Theaters    []*models.Theater
 }
 
 func humanDate(t time.Time) string {

@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	ErrNoRecord           = errors.New("models: no matching record found")
+	ErrNoRecord = errors.New("models: no matching record found")
 )
 
 type Theater struct {
