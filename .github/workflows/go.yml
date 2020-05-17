@@ -33,4 +33,12 @@ jobs:
         host: ${{ secrets.CC_HOSTNAME }}
         username: ${{ secrets.CC_SSH_USER }}
         key: ${{ secrets.CC_SSH_KEY }}
-        script: ls
+        source: curtaincall,web/*
+        target: /home/${{ secrets.CC_SSH_USER }}/
+
+    - uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.CC_HOSTNAME }}
+        username: ${{ secrets.CC_SSH_USER }}
+        key: ${{ secrets.CC_SSH_KEY }}
+        script: sudo systemctl restart curtaincall
