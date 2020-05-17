@@ -43,7 +43,7 @@ jobs:
         host: ${{ secrets.CC_HOSTNAME }}
         username: ${{ secrets.CC_SSH_USER }}
         key: ${{ secrets.CC_SSH_KEY }}
-        script: sqlite3 test.db < setup.sql
+        script: sqlite3 prod.db < setup.sql
         #TODO: make this script idempotent
 
     - name: restart application
