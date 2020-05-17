@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"flag"
 	"html/template"
 	"log"
 	"net/http"
@@ -41,18 +40,26 @@ type application struct {
 	}
 }
 
+func requireEnv(name string) string {
+    value, ok := os.LookupEnv(name)
+    if !ok {
+      log.Fatalf("No enviornment variable: %q", name)
+    }
+
+    return value
+}
+
 func main() {
 
-	addr := flag.String("addr", ":8080", "HTTP network address")
-	dsn := flag.String("dsn", "./test.db", "Database data source name")
-	dr := flag.String("dr", "sqlite3", "The Database driver to use")
-	secret := flag.String("secret", "akdjiekdjfldjfhuejdkiofadsalfjckj", "Secret")
-	flag.Parse()
+    secret := requireEnv("CC_SESSION_SECRET")
+    dr := requireEnv("CC_DB_DRIVER")
+    dsn := requireEnv("CC_DB_DSN")
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
-	db, err := openDB(*dr, *dsn)
+
+	db, err := openDB(dr, dsn)
 	if err != nil {
 		errorLog.Fatal(err)
 	}
@@ -63,7 +70,7 @@ func main() {
 		errorLog.Fatal(err)
 	}
 
-	session := sessions.New([]byte(*secret))
+	session := sessions.New([]byte(secret))
 	session.Lifetime = 12 * time.Hour
 	session.Secure = true
 	session.SameSite = http.SameSiteStrictMode
@@ -79,7 +86,7 @@ func main() {
 	}
 
 	srv := &http.Server{
-		Addr:         *addr,
+		Addr:         ":8080",
 		ErrorLog:     errorLog,
 		Handler:      app.routes(),
 		IdleTimeout:  time.Minute,
@@ -87,7 +94,7 @@ func main() {
 		WriteTimeout: 10 * time.Second,
 	}
 
-	infoLog.Printf("Starting Curtain Call on port %s", *addr)
+	infoLog.Printf("Starting Curtain Call on port :8080")
 	err = srv.ListenAndServe()
 	errorLog.Fatal(err)
 }
