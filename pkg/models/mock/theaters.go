@@ -11,10 +11,6 @@ var mockTheater = &models.Theater{
 
 type TheaterModel struct{}
 
-func (m *TheaterModel) Insert(name string) (int, error) {
-	return 2, nil
-}
-
 func (m *TheaterModel) Get(id int) (*models.Theater, error) {
 	switch id {
 	case 1:

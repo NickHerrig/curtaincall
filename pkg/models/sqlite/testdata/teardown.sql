@@ -1,5 +1,3 @@
-DROP TABLE users;
-
 DROP TABLE theaters;
 
 DROP TABLE shows;

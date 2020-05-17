@@ -5,16 +5,11 @@ import (
 	"path/filepath"
 	"time"
 
-	"curtaincall.tech/pkg/forms"
 	"curtaincall.tech/pkg/models"
 )
 
 type templateData struct {
-	CSRFToken       string
 	CurrentYear     int
-	Flash           string
-	Form            *forms.Form
-	IsAuthenticated bool
 	Show            *models.Show
 	Shows           []*models.Show
 	Theater         *models.Theater

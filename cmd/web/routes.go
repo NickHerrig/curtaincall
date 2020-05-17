@@ -10,26 +10,11 @@ import (
 func (app *application) routes() http.Handler {
 	standardMiddleware := alice.New(app.recoverPanic, app.logRequest, secureHeaders)
 
-	dynamicMiddleware := alice.New(app.session.Enable, noSurf, app.authenticate)
-
 	mux := pat.New()
-	mux.Get("/", dynamicMiddleware.ThenFunc(app.home))
-
-	mux.Get("/theater/create", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.createTheaterForm))
-	mux.Post("/theater/create", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.createTheater))
-	mux.Get("/theater/:id", dynamicMiddleware.ThenFunc(app.showTheater))
-
-	mux.Get("/show/:id", dynamicMiddleware.ThenFunc(app.showShow))
-
-	mux.Get("/user/signup", dynamicMiddleware.ThenFunc(app.signupUserForm))
-	mux.Post("/user/signup", dynamicMiddleware.ThenFunc(app.signupUser))
-	mux.Get("/user/login", dynamicMiddleware.ThenFunc(app.loginUserForm))
-	mux.Post("/user/login", dynamicMiddleware.ThenFunc(app.loginUser))
-	mux.Post("/user/logout", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.logoutUser))
-
+	mux.Get("/", http.HandlerFunc(app.home))
+	mux.Get("/theater/:id", http.HandlerFunc(app.showTheater))
+	mux.Get("/show/:id", http.HandlerFunc(app.showShow))
 	mux.Get("/ping", http.HandlerFunc(ping))
-
-	mux.Get("/html", dynamicMiddleware.ThenFunc(app.html)) // a route for testing some html learnings
 
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 	mux.Get("/static/", http.StripPrefix("/static", fileServer))
