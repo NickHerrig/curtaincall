@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"io/ioutil"
 	"testing"
+
+    _ "github.com/mattn/go-sqlite3"
 )
 
 func newTestDB(t *testing.T) (*sql.DB, func()) {
