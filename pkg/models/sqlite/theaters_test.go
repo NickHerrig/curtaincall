@@ -24,6 +24,24 @@ func TestTheaterModelGet(t *testing.T) {
 			},
 			wantError: nil,
 		},
+		{
+			name:      "Zero ID",
+			theaterID: 0,
+			wantTheater: nil,
+			wantError: models.ErrNoRecord,
+		},
+		{
+			name:      "Negative ID",
+			theaterID: -5,
+			wantTheater: nil,
+			wantError: models.ErrNoRecord,
+		},
+		{
+			name:      "Invalid ID",
+			theaterID: 5,
+			wantTheater: nil,
+			wantError: models.ErrNoRecord,
+		},
 	}
 
 	for _, tt := range tests {

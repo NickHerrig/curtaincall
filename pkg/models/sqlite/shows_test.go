@@ -25,6 +25,12 @@ func TestShowModelGet(t *testing.T) {
 			},
 			wantError: nil,
 		},
+		{
+			name:      "Valid ID",
+			showID: 1,
+			wantShow:
+			wantError: nil,
+		},
 	}
 
 	for _, tt := range tests {
