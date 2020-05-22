@@ -9,6 +9,10 @@ import (
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
+	app.render(w, r, "home.page.tmpl", &templateData{})
+}
+
+func (app *application) retriveAllTheaters(w http.ResponseWriter, r *http.Request) {
 
 	t, err := app.theaters.Latest()
 	if err != nil {
@@ -17,10 +21,10 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := &templateData{Theaters: t}
-	app.render(w, r, "home.page.tmpl", data)
+	app.render(w, r, "all.theaters.page.tmpl", data)
 }
 
-func (app *application) showTheater(w http.ResponseWriter, r *http.Request) {
+func (app *application) retriveTheater(w http.ResponseWriter, r *http.Request) {
 
 	id, err := strconv.Atoi(r.URL.Query().Get(":id"))
 	if err != nil || id < 1 {
@@ -51,7 +55,23 @@ func (app *application) showTheater(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (app *application) showShow(w http.ResponseWriter, r *http.Request) {
+func (app *application) createTheater(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("CREATE THEATER"))
+}
+
+func (app *application) deleteTheater(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("DELETE THEATER"))
+}
+
+func (app *application) patchTheater(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("PATCH THEATER"))
+}
+
+func (app *application) updateTheater(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("UPDATE THEATER"))
+}
+
+func (app *application) retriveShow(w http.ResponseWriter, r *http.Request) {
 
 	id, err := strconv.Atoi(r.URL.Query().Get(":id"))
 	if err != nil || id < 1 {

@@ -33,13 +33,13 @@ func TestShowTheater(t *testing.T) {
 		wantCode int
 		wantBody []byte
 	}{
-		{"Valid ID", "/theater/1", http.StatusOK, []byte("Des Moines Civic Center")},
-		{"Non-existent ID", "/theater/2", http.StatusNotFound, nil},
-		{"Negative ID", "/theater/-1", http.StatusNotFound, nil},
-		{"Decimal ID", "/theater/1.23", http.StatusNotFound, nil},
-		{"String ID", "/theater/desmoines", http.StatusNotFound, nil},
-		{"Empty ID", "/theater/", http.StatusNotFound, nil},
-		{"Trailing slash", "/theater/1/", http.StatusNotFound, nil},
+		{"Valid ID", "/theaters/1", http.StatusOK, []byte("Des Moines Civic Center")},
+		{"Non-existent ID", "/theaters/2", http.StatusNotFound, nil},
+		{"Negative ID", "/theaters/-1", http.StatusNotFound, nil},
+		{"Decimal ID", "/theaters/1.23", http.StatusNotFound, nil},
+		{"String ID", "/theaters/desmoines", http.StatusNotFound, nil},
+		{"Empty ID", "/theaters/", http.StatusNotFound, nil},
+		{"Trailing slash", "/theaters/1/", http.StatusNotFound, nil},
 	}
 
 	for _, tt := range tests {

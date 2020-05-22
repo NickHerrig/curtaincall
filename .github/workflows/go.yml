@@ -37,6 +37,15 @@ jobs:
         source: curtaincall,setup.sql,ui/*
         target: /home/${{ secrets.CC_SSH_USER }}/
 
+    #TODO: temporary remove db...
+    - name: remove db
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.CC_HOSTNAME }}
+        username: ${{ secrets.CC_SSH_USER }}
+        key: ${{ secrets.CC_SSH_KEY }}
+        script: rm prod.db
+
     - name: initalize db
       uses: appleboy/ssh-action@master
       with:
