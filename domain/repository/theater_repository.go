@@ -9,5 +9,5 @@ type TheaterRepository interface {
     RetriveTheater(*entity.Theater, error)
     RetriveAllTheaters() ([]entity.Theater, error)
     UpdateTheater(*entity.Theater) (*entity.Theater, map[string]string)
-    DeleteTheater(int)
+    DeleteTheater(int) error
 }
