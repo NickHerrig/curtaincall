@@ -12,12 +12,14 @@ import (
 )
 
 func main() {
+
     var adder adding.Service
-    s, _ := sqlite.NewStorage()
-    //TODO Error Handling
+    s, err := sqlite.NewStorage()
+    if err != nil {
+        log.Fatal(err)
+    }
 
     adder = adding.NewService(s)
-
     router := rest.Handler(adder)
 
     fmt.Println("The API server is running on port :8080")

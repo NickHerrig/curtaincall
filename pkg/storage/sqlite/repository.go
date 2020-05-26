@@ -36,3 +36,25 @@ func (s *Storage) AddTheater(t adding.Theater) error {
 
 	return nil
 }
+
+func (s *Storage) AddShow(sh adding.Show) error {
+    stmt := `INSERT INTO shows (name, company, description)
+             VALUES (?, ?, ?)`
+    result, err := s.db.Exec(stmt, sh.Name, sh.Company, sh.Description)
+    if err != nil {
+        return err
+    }
+    id, err := result.LastInsertId()
+    if err != nil {
+        return err
+    }
+
+    stmt = `INSERT INTO theaters_shows_bridge (theater_id, show_id)
+            VALUES (?,?);`
+    _, err = s.db.Exec(stmt, sh.TheaterID, id)
+    if err != nil {
+        return err
+    }
+
+	return nil
+}
