@@ -5,7 +5,7 @@ import (
     "net/http"
     "log"
 
-    "curtaincall.tech/pkg/adding"
+    "curtaincall.tech/pkg/creating"
     "curtaincall.tech/pkg/http/rest"
     "curtaincall.tech/pkg/storage/sqlite"
 
@@ -13,14 +13,14 @@ import (
 
 func main() {
 
-    var adder adding.Service
+    var creator creating.Service
     s, err := sqlite.NewStorage()
     if err != nil {
         log.Fatal(err)
     }
 
-    adder = adding.NewService(s)
-    router := rest.Handler(adder)
+    creator = creating.NewService(s)
+    router := rest.Handler(creator)
 
     fmt.Println("The API server is running on port :8080")
     log.Fatal(http.ListenAndServe(":8080", router))

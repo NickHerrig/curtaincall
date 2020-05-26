@@ -1,4 +1,4 @@
-package adding
+package creating
 
 type Theater struct {
     Name        string `json:"name"`

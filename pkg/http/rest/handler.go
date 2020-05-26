@@ -3,70 +3,64 @@ package rest
 import (
     "encoding/json"
     "net/http"
-    "strconv"
 
-    "curtaincall.tech/pkg/adding"
+    "curtaincall.tech/pkg/creating"
 
     "github.com/bmizerany/pat"
 )
 
-func Handler(a adding.Service) http.Handler {
+func Handler(c creating.Service) http.Handler {
     router := pat.New()
 
-    router.Post("/theaters", http.HandlerFunc(addTheater(a)))
-    router.Post("/theaters/:id/shows", http.HandlerFunc(addShow(a)))
+    router.Post("/theaters", http.HandlerFunc(createTheater(c)))
+    router.Post("/shows", http.HandlerFunc(createShow(c)))
 
     return router
 }
 
-func addTheater(s adding.Service) func(w http.ResponseWriter, r *http.Request) {
+func createTheater(s creating.Service) func(w http.ResponseWriter, r *http.Request) {
     return func(w http.ResponseWriter, r *http.Request) {
+        //var id int
         decoder := json.NewDecoder(r.Body)
 
-        var newTheater adding.Theater
+        var newTheater creating.Theater
         err := decoder.Decode(&newTheater)
         if err != nil {
             http.Error(w, err.Error(), http.StatusBadRequest)
             return
         }
 
-        err = s.AddTheater(newTheater)
+        _, err = s.CreateTheater(newTheater)
         if err != nil {
             http.Error(w, err.Error(), http.StatusBadRequest)
             return
         }
 
         w.Header().Set("Content-Type", "application/json")
-        json.NewEncoder(w).Encode("New Theater Added")
+        json.NewEncoder(w).Encode("New Theater Created!")
     }
 }
 
-func addShow(s adding.Service) func(w http.ResponseWriter, r *http.Request) {
+func createShow(s creating.Service) func(w http.ResponseWriter, r *http.Request) {
     return func(w http.ResponseWriter, r *http.Request) {
-	    id, err := strconv.Atoi(r.URL.Query().Get(":id"))
-	    if err != nil || id < 1 {
-            http.Error(w, err.Error(), http.StatusBadRequest)
-	        return
-	    }
-
+        //var id int
         decoder := json.NewDecoder(r.Body)
 
-        var newShow adding.Show
-        newShow.TheaterID = id
+        var newShow creating.Show
 
-        err = decoder.Decode(&newShow)
+        err := decoder.Decode(&newShow)
         if err != nil {
             http.Error(w, err.Error(), http.StatusBadRequest)
             return
         }
 
-        err = s.AddShow(newShow)
+        _, err = s.CreateShow(newShow)
         if err != nil {
             http.Error(w, err.Error(), http.StatusBadRequest)
             return
         }
 
         w.Header().Set("Content-Type", "application/json")
-        json.NewEncoder(w).Encode("New Show Added")
+        json.NewEncoder(w).Encode("New Show Created")
     }
 }
