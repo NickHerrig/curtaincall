@@ -1,10 +1,12 @@
 package sqlite
 
 import (
+    "database/sql"
+
     "curtaincall.tech/pkg/creating"
+    "curtaincall.tech/pkg/retrieving"
 
     _ "github.com/mattn/go-sqlite3"
-    "database/sql"
 )
 
 type Storage struct {
@@ -59,7 +61,29 @@ func (s *Storage) CreateShow(sh creating.Show) (int, error) {
 }
 
 
-func (s *Storage) RetriveAllTheaters() ([]retrieving.Theater, error) {
+func (s *Storage) RetrieveAllTheaters() ([]*retrieving.Theater, error) {
     stmt := `SELECT theater_id, name, address, description FROM theaters`
-    // TODO: Need to create theater slice from values, return error if empty or invald.
+
+    rows, err := s.db.Query(stmt)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    theaters := []*retrieving.Theater{}
+
+    for rows.Next() {
+        t := &retrieving.Theater{}
+        err = rows.Scan(&t.ID, &t.Name, &t.Address, &t.Description)
+        if err != nil {
+            return nil, err
+        }
+        theaters = append(theaters, t)
+    }
+
+    if err = rows.Err(); err!= nil {
+        return nil, err
+    }
+
+    return theaters, nil    
 }

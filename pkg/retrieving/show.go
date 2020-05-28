@@ -1,4 +1,4 @@
-package creating
+package retrieving 
 
 type Show struct {
     Name        string `json:"name"`
