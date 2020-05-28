@@ -57,3 +57,9 @@ func (s *Storage) CreateShow(sh creating.Show) (int, error) {
 
 	return int(id), nil
 }
+
+
+func (s *Storage) RetriveAllTheaters() ([]retrieving.Theater, error) {
+    stmt := `SELECT theater_id, name, address, description FROM theaters`
+    // TODO: Need to create theater slice from values, return error if empty or invald.
+}
