@@ -2,12 +2,15 @@ package sqlite
 
 import (
     "database/sql"
+    "errors"
 
     "curtaincall.tech/pkg/creating"
     "curtaincall.tech/pkg/retrieving"
 
     _ "github.com/mattn/go-sqlite3"
 )
+
+var ErrNoRecord = errors.New("Storage: no matching record found")
 
 type Storage struct {
     db *sql.DB
@@ -70,7 +73,7 @@ func (s *Storage) RetrieveAllTheaters() ([]*retrieving.Theater, error) {
     }
     defer rows.Close()
 
-    theaters := []*retrieving.Theater{}
+    ts := []*retrieving.Theater{}
 
     for rows.Next() {
         t := &retrieving.Theater{}
@@ -78,7 +81,7 @@ func (s *Storage) RetrieveAllTheaters() ([]*retrieving.Theater, error) {
         if err != nil {
             return nil, err
         }
-        theaters = append(theaters, t)
+        ts = append(ts, t)
     }
 
     if err = rows.Err(); err!= nil {
@@ -86,4 +89,23 @@ func (s *Storage) RetrieveAllTheaters() ([]*retrieving.Theater, error) {
     }
 
     return theaters, nil    
+}
+
+func (s *Storage) RetrieveTheater(id int) (*retrieving.Theater, error) {
+    stmt := `SELECT theater_id, name, address, description FROM theaters`
+
+    row := m.DB.QueryRow(stmt, id)
+
+    t := &retrieving.Theater{}
+
+    err = rows.Scan(&t.ID, &t.Name, &t.Address, &t.Description)
+    if err != nil {
+        if errors.Is(err, sql.ErrNoRows) {
+            return nil, ErrNoRecord
+        } else {
+            return nil, err
+        }
+    }
+
+    return t, nil
 }

@@ -2,10 +2,12 @@ package retrieving
 
 type Service interface {
     RetrieveAllTheaters() ([]*Theater, error)
+    RetrieveTheater(int) (*Theater, error)
 }
 
 type Repository interface {
     RetrieveAllTheaters() ([]*Theater, error)
+    RetrieveTheater(int) (*Theater, error)
 }
 
 type service struct {
@@ -18,4 +20,8 @@ func NewService(r Repository) Service {
 
 func (s *service) RetrieveAllTheaters() ([]*Theater, error) {
      return s.r.RetrieveAllTheaters()
+}
+
+func (s *service) RetrieveTheater() (*Theater, error) {
+     return s.r.RetrieveTheater()
 }
