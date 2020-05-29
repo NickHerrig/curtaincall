@@ -2,10 +2,13 @@ package rest
 
 import (
     "encoding/json"
+    "errors"
     "net/http"
+    "strconv"
 
     "curtaincall.tech/pkg/creating"
     "curtaincall.tech/pkg/retrieving"
+    "curtaincall.tech/pkg/storage/sqlite"
 
     "github.com/bmizerany/pat"
 )
@@ -17,6 +20,7 @@ func Handler(c creating.Service, r retrieving.Service) http.Handler {
     router.Post("/shows", http.HandlerFunc(createShow(c)))
 
     router.Get("/theaters", http.HandlerFunc(retrieveAllTheaters(r)))
+    router.Get("/theaters/:id", http.HandlerFunc(retrieveTheater(r)))
 
     return router
 }
@@ -82,5 +86,30 @@ func retrieveAllTheaters(s retrieving.Service) func(w http.ResponseWriter, r *ht
         //SET HEADERS IN MIDDLEWARE
         w.Header().Set("Content-Type", "application/json")
         json.NewEncoder(w).Encode(theaters)
+    }
+}
+
+func retrieveTheater(s retrieving.Service) func(w http.ResponseWriter, r *http.Request) {
+    return func(w http.ResponseWriter, r *http.Request) {
+
+      id, err := strconv.Atoi(r.URL.Query().Get(":id"))
+      if err != nil {
+          http.Error(w, err.Error(), http.StatusNotFound)
+          return
+      }
+
+      theater, err := s.RetrieveTheater(id)
+      if err != nil {
+          if errors.Is(err, sqlite.ErrNoRecord) {
+              http.Error(w, err.Error(), http.StatusNotFound)
+          } else {
+              http.Error(w, err.Error(), http.StatusBadRequest)
+          }
+          return
+      }
+        
+      //SET HEADERS IN MIDDLEWARE
+      w.Header().Set("Content-Type", "application/json")
+      json.NewEncoder(w).Encode(theater)
     }
 }

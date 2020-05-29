@@ -88,17 +88,18 @@ func (s *Storage) RetrieveAllTheaters() ([]*retrieving.Theater, error) {
         return nil, err
     }
 
-    return theaters, nil    
+    return ts, nil    
 }
 
 func (s *Storage) RetrieveTheater(id int) (*retrieving.Theater, error) {
-    stmt := `SELECT theater_id, name, address, description FROM theaters`
+    stmt := `SELECT theater_id, name, address, description FROM theaters
+             Where theater_id = ?`
 
-    row := m.DB.QueryRow(stmt, id)
+    row := s.db.QueryRow(stmt, id)
 
     t := &retrieving.Theater{}
 
-    err = rows.Scan(&t.ID, &t.Name, &t.Address, &t.Description)
+    err := row.Scan(&t.ID, &t.Name, &t.Address, &t.Description)
     if err != nil {
         if errors.Is(err, sql.ErrNoRows) {
             return nil, ErrNoRecord

@@ -22,6 +22,6 @@ func (s *service) RetrieveAllTheaters() ([]*Theater, error) {
      return s.r.RetrieveAllTheaters()
 }
 
-func (s *service) RetrieveTheater() (*Theater, error) {
-     return s.r.RetrieveTheater()
+func (s *service) RetrieveTheater(id int) (*Theater, error) {
+     return s.r.RetrieveTheater(id)
 }
