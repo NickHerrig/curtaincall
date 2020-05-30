@@ -18,12 +18,12 @@ func Handler(c creating.Service, r retrieving.Service, d deleting.Service) http.
     router := pat.New()
 
     router.Post("/theaters", http.HandlerFunc(createTheater(c)))
-    router.Post("/shows", http.HandlerFunc(createShow(c)))
-
     router.Get("/theaters", http.HandlerFunc(retrieveAllTheaters(r)))
     router.Get("/theaters/:id", http.HandlerFunc(retrieveTheater(r)))
-
     router.Del("/theaters/:id", http.HandlerFunc(deleteTheater(d)))
+
+    router.Get("/theaters/:id/shows", http.HandlerFunc(retrieveAllShows(r)))
+    // router.Post("/shows", http.HandlerFunc(createShow(c)))
 
     return router
 }
@@ -139,5 +139,29 @@ func deleteTheater(s deleting.Service) func(w http.ResponseWriter, r *http.Reque
       //SET HEADERS IN MIDDLEWARE
       w.Header().Set("Content-Type", "application/json")
       json.NewEncoder(w).Encode("Theater Deleted!")
+    }
+}
+
+func retrieveAllShows(s retrieving.Service) func(w http.ResponseWriter, r *http.Request) {
+    return func(w http.ResponseWriter, r *http.Request) {
+      id, err := strconv.Atoi(r.URL.Query().Get(":id"))
+      if err != nil {
+          http.Error(w, err.Error(), http.StatusNotFound)
+          return
+      }
+
+      shows, err := s.RetrieveAllShows(id)
+      if err != nil {
+          if errors.Is(err, sqlite.ErrNoRecord) {
+              http.Error(w, err.Error(), http.StatusNotFound)
+          } else {
+              http.Error(w, err.Error(), http.StatusBadRequest)
+          }
+          return
+      }
+        
+      //SET HEADERS IN MIDDLEWARE
+      w.Header().Set("Content-Type", "application/json")
+      json.NewEncoder(w).Encode(shows)
     }
 }

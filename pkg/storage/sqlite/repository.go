@@ -127,3 +127,31 @@ func (s *Storage) DeleteTheater(id int) error {
 
     return nil
 }
+
+func (s *Storage) RetrieveAllShows(id int) ([]*retrieving.Show, error) {
+    stmt := `SELECT show_id, name, company, description FROM shows 
+             WHERE theater_id = ?`
+
+    rows, err := s.db.Query(stmt, id)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    shows := []*retrieving.Show{}
+
+    for rows.Next() {
+        sh := &retrieving.Show{}
+        err = rows.Scan(&sh.ID, &sh.Name, &sh.Company, &sh.Description)
+        if err != nil {
+            return nil, err
+        }
+        shows = append(shows, sh)
+    }
+
+    if err = rows.Err(); err!= nil {
+        return nil, err
+    }
+
+    return shows, nil    
+}
