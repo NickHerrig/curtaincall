@@ -93,7 +93,7 @@ func (s *Storage) RetrieveAllTheaters() ([]*retrieving.Theater, error) {
 
 func (s *Storage) RetrieveTheater(id int) (*retrieving.Theater, error) {
     stmt := `SELECT theater_id, name, address, description FROM theaters
-             Where theater_id = ?`
+             WHERE theater_id = ?`
 
     row := s.db.QueryRow(stmt, id)
 
@@ -109,4 +109,21 @@ func (s *Storage) RetrieveTheater(id int) (*retrieving.Theater, error) {
     }
 
     return t, nil
+}
+
+func (s *Storage) DeleteTheater(id int) error {
+    stmt := `DELETE FROM theaters WHERE theater_id = ?`
+    result, err := s.db.Exec(stmt, id)
+    if err != nil {
+        return err
+    }
+    rows, err := result.RowsAffected()
+    if err != nil {
+        return err
+    }
+    if rows < 1 {
+        return ErrNoRecord
+    }
+
+    return nil
 }

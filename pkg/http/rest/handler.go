@@ -8,12 +8,13 @@ import (
 
     "curtaincall.tech/pkg/creating"
     "curtaincall.tech/pkg/retrieving"
+    "curtaincall.tech/pkg/deleting"
     "curtaincall.tech/pkg/storage/sqlite"
 
     "github.com/bmizerany/pat"
 )
 
-func Handler(c creating.Service, r retrieving.Service) http.Handler {
+func Handler(c creating.Service, r retrieving.Service, d deleting.Service) http.Handler {
     router := pat.New()
 
     router.Post("/theaters", http.HandlerFunc(createTheater(c)))
@@ -21,6 +22,8 @@ func Handler(c creating.Service, r retrieving.Service) http.Handler {
 
     router.Get("/theaters", http.HandlerFunc(retrieveAllTheaters(r)))
     router.Get("/theaters/:id", http.HandlerFunc(retrieveTheater(r)))
+
+    router.Del("/theaters/:id", http.HandlerFunc(deleteTheater(d)))
 
     return router
 }
@@ -111,5 +114,30 @@ func retrieveTheater(s retrieving.Service) func(w http.ResponseWriter, r *http.R
       //SET HEADERS IN MIDDLEWARE
       w.Header().Set("Content-Type", "application/json")
       json.NewEncoder(w).Encode(theater)
+    }
+}
+
+func deleteTheater(s deleting.Service) func(w http.ResponseWriter, r *http.Request) {
+    return func(w http.ResponseWriter, r *http.Request) {
+
+      id, err := strconv.Atoi(r.URL.Query().Get(":id"))
+      if err != nil {
+          http.Error(w, err.Error(), http.StatusNotFound)
+          return
+      }
+
+      err = s.DeleteTheater(id)
+      if err != nil {
+          if errors.Is(err, sqlite.ErrNoRecord) {
+              http.Error(w, err.Error(), http.StatusNotFound)
+          } else {
+              http.Error(w, err.Error(), http.StatusBadRequest)
+          }
+          return
+      }
+        
+      //SET HEADERS IN MIDDLEWARE
+      w.Header().Set("Content-Type", "application/json")
+      json.NewEncoder(w).Encode("Theater Deleted!")
     }
 }
