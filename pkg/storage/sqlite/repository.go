@@ -155,3 +155,23 @@ func (s *Storage) RetrieveAllShows(id int) ([]*retrieving.Show, error) {
 
     return shows, nil    
 }
+
+func (s *Storage) RetrieveShow(id int) (*retrieving.Show, error) {
+    stmt := `SELECT show_id, name, company, description FROM shows 
+             WHERE show_id = ?`
+
+    row := s.db.QueryRow(stmt, id)
+
+    sh := &retrieving.Show{}
+
+    err := row.Scan(&sh.ID, &sh.Name, &sh.Company, &sh.Description)
+    if err != nil {
+        if errors.Is(err, sql.ErrNoRows) {
+            return nil, ErrNoRecord
+        } else {
+            return nil, err
+        }
+    }
+
+    return sh, nil
+}

@@ -23,6 +23,7 @@ func Handler(c creating.Service, r retrieving.Service, d deleting.Service) http.
     router.Del("/theaters/:id", http.HandlerFunc(deleteTheater(d)))
 
     router.Get("/theaters/:id/shows", http.HandlerFunc(retrieveAllShows(r)))
+    router.Get("/theaters/:id/shows/:showid", http.HandlerFunc(retrieveShow(r)))
     // router.Post("/shows", http.HandlerFunc(createShow(c)))
 
     return router
@@ -163,5 +164,32 @@ func retrieveAllShows(s retrieving.Service) func(w http.ResponseWriter, r *http.
       //SET HEADERS IN MIDDLEWARE
       w.Header().Set("Content-Type", "application/json")
       json.NewEncoder(w).Encode(shows)
+    }
+}
+
+func retrieveShow(s retrieving.Service) func(w http.ResponseWriter, r *http.Request) {
+    return func(w http.ResponseWriter, r *http.Request) {
+
+      id, err := strconv.Atoi(r.URL.Query().Get(":showid"))
+      if err != nil {
+          http.Error(w, err.Error(), http.StatusNotFound)
+          return
+      }
+
+      json.NewEncoder(w).Encode(id)
+      
+      show, err := s.RetrieveShow(id)
+      if err != nil {
+          if errors.Is(err, sqlite.ErrNoRecord) {
+              http.Error(w, err.Error(), http.StatusNotFound)
+          } else {
+              http.Error(w, err.Error(), http.StatusBadRequest)
+          }
+          return
+      }
+        
+      //SET HEADERS IN MIDDLEWARE
+      w.Header().Set("Content-Type", "application/json")
+      json.NewEncoder(w).Encode(show)
     }
 }
