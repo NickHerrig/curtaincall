@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"errors"
     "fmt"
+    "io"
     "log"
 	"net/http"
 	"strconv"
+    "strings"
 
 	"curtaincall.tech/pkg/creating"
 	"curtaincall.tech/pkg/deleting"
@@ -35,8 +37,6 @@ func Handler(c creating.Service, r retrieving.Service, d deleting.Service) http.
 func createTheater(s creating.Service) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-        // This chunk checks to see that that Contentp-Type header is present
-        // and that it is set to application/json
 		if r.Header.Get("Content-Type") != "" {
 			value, _ := header.ParseValueAndParams(r.Header, "Content-Type")
 			if value != "application/json" {
@@ -46,12 +46,8 @@ func createTheater(s creating.Service) func(w http.ResponseWriter, r *http.Reque
 			}
 		}
 
-        // this chunk enforces a maximum 1MB body size
-        // Decode() will return "http: request body too large" an HTTP 413
         r.Body = http.MaxBytesReader(w, r.Body, 1048576)
 
-        // decode the body and call DisallowUnknownFields() on it.
-        // this will cause Decode() to raise a 
 		dec := json.NewDecoder(r.Body)
         dec.DisallowUnknownFields()
 
@@ -59,18 +55,71 @@ func createTheater(s creating.Service) func(w http.ResponseWriter, r *http.Reque
 		err := dec.Decode(&t)
 		if err != nil {
             var syntaxError *json.SyntaxError
-        
+            var unmarshalTypeError *json.UnmarshalTypeError
+
             switch {
+            // Catch any syntax errors in the JSON and send an error message
+            // which interpolates the location of the problem to make it
+            // easier for the client to fix.
             case errors.As(err, &syntaxError):
-                msg := fmt.Sprintf("Request body contains malformed JSON (at position %d)", syntaxError.Offset)
+                msg := fmt.Sprintf("Request body contains badly-formed JSON (at position %d)", syntaxError.Offset)
                 http.Error(w, msg, http.StatusBadRequest)
 
+            // In some circumstances Decode() may also return an
+            // io.ErrUnexpectedEOF error for syntax errors in the JSON. There
+            // is an open issue regarding this at
+            // https://github.com/golang/go/issues/25956.
+            case errors.Is(err, io.ErrUnexpectedEOF):
+                msg := fmt.Sprintf("Request body contains badly-formed JSON")
+                http.Error(w, msg, http.StatusBadRequest)
+
+            // Catch any type errors, like trying to assign a string in the
+            // JSON request body to a int field in our Person struct. We can
+            // interpolate the relevant field name and position into the error
+            // message to make it easier for the client to fix.
+            case errors.As(err, &unmarshalTypeError):
+                msg := fmt.Sprintf("Request body contains an invalid value for the %q field (at position %d)", unmarshalTypeError.Field, unmarshalTypeError.Offset)
+                http.Error(w, msg, http.StatusBadRequest)
+
+            // Catch the error caused by extra unexpected fields in the request
+            // body. We extract the field name from the error message and
+            // interpolate it in our custom error message. There is an open
+            // issue at https://github.com/golang/go/issues/29035 regarding
+            // turning this into a sentinel error.
+            case strings.HasPrefix(err.Error(), "json: unknown field "):
+                fieldName := strings.TrimPrefix(err.Error(), "json: unknown field ")
+                msg := fmt.Sprintf("Request body contains unknown field %s", fieldName)
+                http.Error(w, msg, http.StatusBadRequest)
+
+            // An io.EOF error is returned by Decode() if the request body is
+            // empty.
+            case errors.Is(err, io.EOF):
+                msg := "Request body must not be empty"
+                http.Error(w, msg, http.StatusBadRequest)
+
+            // Catch the error caused by the request body being too large. Again
+            // there is an open issue regarding turning this into a sentinel
+            // error at https://github.com/golang/go/issues/30715.
+            case err.Error() == "http: request body too large":
+                msg := "Request body must not be larger than 1MB"
+                http.Error(w, msg, http.StatusRequestEntityTooLarge)
+
+            // Otherwise default to logging the error and sending a 500 Internal
+            // Server Error response.
             default:
                 log.Println(err.Error())
                 http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
             }
             return
-		}
+        }
+
+    	err = dec.Decode(&struct{}{})
+    	if err != io.EOF {
+            msg := "Request body must only contain a single JSON object"
+            http.Error(w, msg, http.StatusBadRequest)
+            return
+        }
+
 		_, err = s.CreateTheater(t)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
