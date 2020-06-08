@@ -1,10 +1,28 @@
 <template>
-  <h1>Hello World</h1>
+  <div id="app">
+    <img alt="Curtain Call Logo" src="./assets/logo.png">
+    <Home msg="Welcome to Curtain Call!"/>
+  </div>
 </template>
 
 <script>
+import Home from './components/Home.vue'
 
 export default {
-  name: 'App'
-};
+  name: 'App',
+  components: {
+    Home
+  }
+}
 </script>
+
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>
