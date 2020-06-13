@@ -2,15 +2,19 @@
   <div class="home">
     <img class="logo" alt="Curtain Call Logo" src="./assets/logo.png">
     <h1>Welcome to Curtain Call!</h1>
-    <button v-on:click="onShows" class="shows" type="button">View Shows</button>
+    <button v-on:click="viewShows" type="button">View Shows</button>
   </div>
 </template>
 
 <script>
   export default {
     name: 'Home',
+	methods: {
+		viewShows: function() {
+			this.$router.push('shows')
+		},
   }
-
+  }
 </script>
 
 <style>
@@ -24,6 +28,7 @@
 
 .home h1 {
   font-size: 30px;
+  padding-bottom: 1em;
 }
 
 .home button {

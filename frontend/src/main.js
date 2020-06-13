@@ -5,11 +5,13 @@ Vue.use(VueRouter)
 
 import App from './App.vue'
 import Home from './Home.vue'
+import Shows from './Shows.vue'
 
 const router = new VueRouter({
   mode: 'history',
   routes: [
     { path: '/', component: Home },
+    { path: '/shows', component: Shows },
   ]
 })
 
