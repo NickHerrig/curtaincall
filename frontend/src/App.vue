@@ -1,17 +1,19 @@
 <template>
   <div id="app">
-    <img alt="Curtain Call Logo" src="./assets/logo.png">
-    <Home msg="Welcome to Curtain Call!"/>
+    <home />
+    <theater-tile />
   </div>
 </template>
 
 <script>
-import Home from './components/Home.vue'
+import Home from '@/components/Home.vue'
+import TheaterTile from '@/components/TheaterTile.vue'
 
 export default {
   name: 'App',
   components: {
-    Home
+    Home,
+    TheaterTile,
   }
 }
 </script>
