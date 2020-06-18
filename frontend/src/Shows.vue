@@ -11,10 +11,9 @@
     <ShowTile 
       v-for="show in shows" 
       v-bind:key="show.id" 
-      v-bind:name="show.name">
-      v-bind:company="show.company">
-      v-bind:description="show.description">
-    </ShowTile>
+      v-bind:name="show.name"
+      v-bind:logo="show.logo"
+    ></ShowTile>
   </div>
 </div>
 </template>
@@ -33,21 +32,17 @@ export default {
       shows: [
         {
           id: 1,
-          name: 'name1',
-          company: 'company1',
-          description: 'description1',
+          name: 'Hamilton',
+          company: 'Lin Manuel',
+          description: 'A fantastic show',
+          logo: 'hamilton.jpg',
         },
         {
           id: 2,
-          name: 'name2',
-          company: 'company2',
-          description: 'description2',
-        },
-        {
-          id: 3,
-          name: 'name3',
-          company: 'company3',
-          description: 'description3',
+          name: 'Dear Evan Hansen',
+          company: 'Creative Co',
+          description: 'Another fantastic show',
+          logo: 'hamilton.jpg',
         },
       ],
     }
