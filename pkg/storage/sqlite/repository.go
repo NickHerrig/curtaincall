@@ -128,11 +128,10 @@ func (s *Storage) DeleteTheater(id int) error {
     return nil
 }
 
-func (s *Storage) RetrieveAllShows(id int) ([]*retrieving.Show, error) {
-    stmt := `SELECT show_id, name, company, description FROM shows 
-             WHERE theater_id = ?`
+func (s *Storage) RetrieveAllShows() ([]*retrieving.Show, error) {
+    stmt := `SELECT show_id, name, company, description FROM shows`
 
-    rows, err := s.db.Query(stmt, id)
+    rows, err := s.db.Query(stmt)
     if err != nil {
         return nil, err
     }
