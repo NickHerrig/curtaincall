@@ -28,6 +28,6 @@ func main() {
     deleter = deleting.NewService(s)
     router := rest.Handler(creator, retriever, deleter)
 
-    fmt.Println("The API server is running on port :8080")
-    log.Fatal(http.ListenAndServe(":8080", router))
+    fmt.Println("The API server is running on port :8888")
+    log.Fatal(http.ListenAndServe(":8888", router))
 }
