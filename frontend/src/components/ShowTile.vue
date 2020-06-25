@@ -30,20 +30,16 @@ export default {
 <style scoped>
 
 .show-tile {
+  flex: 1 1 50%;
   position: relative;
   border: 1px solid #efefef;
   border-radius: 32px;
   box-shadow: 2px 6px 25px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  padding: 10px;
-  margin: 15px;
-
-  display: flex;
-  align-items: flex-start;
-}
-
-.show-tile:hover {
-  box-shadow: 2px 6px 30px rgba(0, 0, 0, 0.2);
+  margin: 15px 0;
+  &:hover {
+    box-shadow: 2px 6px 30px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .show-content {

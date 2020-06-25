@@ -1,9 +1,8 @@
 <template>
-<div>
-  <div v-if="shows.length <= 0">
-    <p>Sorry there are no shows yet!</p>
-  </div>
-  <div v-else>
+
+<div class="container">
+  <div class="flex-container">
+
     <ShowTile 
       v-for="show in shows" 
       v-bind:key="show.id" 
@@ -12,8 +11,10 @@
       v-bind:description="show.description"
       v-bind:logo="show.logo"
     ></ShowTile>
+
   </div>
 </div>
+
 </template>
 
 <script>
@@ -25,29 +26,54 @@ export default {
   components: {
     ShowTile,
   },
-  data() {
+  data: function() {
     return {
-      shows: [
-        {
-          id: 1,
-          name: 'Hamilton',
-          company: 'Lin Manuel',
-          description: 'The musical centres on the life of Alexander Hamilton, who was orphaned and moved to New York in hope of a better life. While there, the smart up-start impressed with his hunger for revolution and reform, to take the United States away from British forces. The story sees Hamilton become George Washington’s right-hand-man, fall in love, and go on to become the first Secretary of the Treasury of the United States.',
-          logo: 'hamilton.jpg',
-        },
-        {
-          id: 2,
-          name: 'Dear Evan Hansen',
-          company: 'Creative Co',
-          description: 'Dear Evan Hansen tells the story of a young man with social anxiety disorder who so yearns to make a connection with his peers that he fabricates a relationship with a deceased student to become closer to the boy’s family.',
-          logo: 'dear-evan-hansen.jpg',
-        },
-      ],
+      shows: [],
     }
+  },
+  methods: {
+    fetchAllShows: async function() {
+
+      let response = await fetch("http://localhost:8888/shows", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+
+      let data = await response.json()
+      if (data.length > 0) {
+        this.shows = data
+      } else {
+          this.errorMessage = data.error
+      }
+      this.dataReady = true;
+    },
+  },
+  beforeMount(){
+    this.fetchAllShows()
   },
 }
 
 </script>
 
 <style>
+* {
+  &::before,
+  &::after {
+    box-sizing: border-box;
+  }
+}
+
+.container {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+@media screen and (min-width: 800px) {
+  .flex-container {
+    display: flex;
+  }
+}
 </style>
