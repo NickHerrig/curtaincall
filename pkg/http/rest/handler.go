@@ -19,18 +19,9 @@ func Handler(c creating.Service, r retrieving.Service, d deleting.Service) http.
 
 	router := pat.New()
 
-	router.Options("/", http.HandlerFunc(home()))
 	router.Get("/shows", http.HandlerFunc(retrieveAllShows(r)))
 
 	return standardMiddleware.Then(router)
-}
-
-
-func home() func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-        w.Header().Set("Content-Type", "application/json")
-        w.WriteHeader(http.StatusOK)
-    }
 }
 
 func retrieveAllShows(s retrieving.Service) func(w http.ResponseWriter, r *http.Request) {

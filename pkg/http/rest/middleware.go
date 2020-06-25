@@ -19,6 +19,10 @@ func corsHeaders(next http.Handler) http.Handler {
     w.Header().Set("Access-Control-Allow-Methods", "*")
     w.Header().Set("Access-Control-Allow-Headers", "*")
 
+    if r.Method == http.MethodOptions {
+        return
+    }
+
     next.ServeHTTP(w, r)
   })
   
