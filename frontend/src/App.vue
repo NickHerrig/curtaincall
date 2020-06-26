@@ -23,9 +23,9 @@ html {
 
 /* Centering */
 body {
+  line-height: 1.5;
   margin: 0 auto;
   max-width: 50em;
 }
-
 
 </style>

@@ -1,5 +1,4 @@
 <template>
-<!--  <img class="show-logo" v-bind:src="require('@/assets/'+logo)"> -->
 
 <div class="show-tile">
   <div class="show-content">
@@ -37,13 +36,14 @@ export default {
   box-shadow: 2px 6px 25px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   margin: 15px 0;
-  &:hover {
-    box-shadow: 2px 6px 30px rgba(0, 0, 0, 0.2);
-  }
+}
+
+.show-tile:hover {
+  box-shadow: 2px 6px 30px rgba(0, 0, 0, 0.4);
 }
 
 .show-content {
-  padding: 30px 30px 110px;
+  padding: 30px 30px 30px;
 }
 
 .show-tile h1 {

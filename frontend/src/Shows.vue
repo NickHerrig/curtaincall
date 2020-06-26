@@ -1,18 +1,14 @@
 <template>
 
-<div class="container">
-  <div class="flex-container">
-
-    <ShowTile 
-      v-for="show in shows" 
-      v-bind:key="show.id" 
-      v-bind:name="show.name"
-      v-bind:company="show.company"
-      v-bind:description="show.description"
-      v-bind:logo="show.logo"
-    ></ShowTile>
-
-  </div>
+<div>
+  <ShowTile
+    v-for="show in shows" 
+    v-bind:key="show.id" 
+    v-bind:name="show.name"
+    v-bind:company="show.company"
+    v-bind:description="show.description"
+    v-bind:logo="show.logo"
+  ></ShowTile>
 </div>
 
 </template>
@@ -58,22 +54,4 @@ export default {
 </script>
 
 <style>
-* {
-  &::before,
-  &::after {
-    box-sizing: border-box;
-  }
-}
-
-.container {
-  max-width: 850px;
-  margin: 0 auto;
-  padding: 0 15px;
-}
-
-@media screen and (min-width: 800px) {
-  .flex-container {
-    display: flex;
-  }
-}
 </style>
