@@ -1,15 +1,17 @@
 package main
 
 import (
-    "fmt"
-    "net/http"
     "log"
+    "net/http"
+    "time"
 
     "curtaincall.tech/pkg/web"
     "curtaincall.tech/pkg/retrieving"
     "curtaincall.tech/pkg/storage/sqlite"
 
     "github.com/bmizerany/pat"
+    "github.com/justinas/alice"
+
 
 )
 
@@ -22,9 +24,22 @@ func main() {
 
     r := retrieving.NewService(s)
 
+    standardMiddleware := alice.New(web.SecureHeaders, web.CorsHeaders)    
+
     m := pat.New()
     m.Get("/shows", http.HandlerFunc(web.RetrieveAllShows(r)))
 
-    fmt.Println("The API server is running on port :8888")
-    log.Fatal(http.ListenAndServe(":8888", m))
+	handler := standardMiddleware.Then(m)
+
+	srv := &http.Server{
+		Addr:         ":8888",
+		Handler:      handler,
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+
+	log.Println("Listening on :8888")
+	log.Fatal(srv.ListenAndServe())
+
 }
