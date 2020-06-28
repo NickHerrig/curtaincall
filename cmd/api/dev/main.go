@@ -24,7 +24,7 @@ func main() {
 
     r := retrieving.NewService(s)
 
-    standardMiddleware := alice.New(web.SecureHeaders, web.CorsHeaders)    
+    standardMiddleware := alice.New(web.RecoverPanic, web.SecureHeaders, web.CorsHeaders)    
 
     m := pat.New()
     m.Get("/shows", http.HandlerFunc(web.RetrieveAllShows(r)))
