@@ -1,27 +1,60 @@
 package main
 
 import (
-    "fmt"
-    "net/http"
     "log"
+    "net/http"
+    "time"
 
+    "curtaincall.tech/pkg/web"
     "curtaincall.tech/pkg/retrieving"
-
-    "curtaincall.tech/pkg/http/rest"
     "curtaincall.tech/pkg/storage/sqlite"
+
+    "github.com/bmizerany/pat"
+    "github.com/justinas/alice"
+
+
 )
 
 func main() {
 
-    var retriever retrieving.Service
+    //TODO: Add go environment varialbe importing for api port and fqdn
+
     s, err := sqlite.NewStorage()
     if err != nil {
         log.Fatal(err)
     }
 
-    retriever = retrieving.NewService(s)
-    router := rest.Handler(retriever)
+    r := retrieving.NewService(s)
 
-    fmt.Println("The API server is running on port :8888")
-    log.Fatal(http.ListenAndServe(":8888", router))
+    standardMiddleware := alice.New(web.RecoverPanic, web.SecureHeaders, web.CorsHeaders)    
+
+    //TODO: Add serving of index.html for VUE JS and vue router routes
+    //TODO: Look into subroutes for entry point 
+
+    m := pat.New()
+    m.Get("/shows", http.HandlerFunc(web.RetrieveAllShows(r)))
+
+	handler := standardMiddleware.Then(m)
+
+    //TODO: Add listener ports from socket file
+
+    //TODO: Add HTTP to HTTPS redirect
+
+    //TODO: Add HTTPS Server details
+
+    //TODO: Add auto cert renewal 
+
+    //TODO: Zero Downtime Deployment?
+
+	srv := &http.Server{
+		Addr:         ":8888",
+		Handler:      handler,
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+
+	log.Println("Listening on :8888")
+	log.Fatal(srv.ListenAndServe())
+
 }
