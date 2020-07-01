@@ -26,7 +26,7 @@ jobs:
 #      run: go test ./...
 
     - name: build code
-      run: go build -o curtaincall ./cmd/web
+      run: go build -o curtaincall ./cmd/api/prod
 
     - name: Deploy binary and static files
       uses: appleboy/scp-action@master
