@@ -3,7 +3,9 @@ package main
 import (
     "log"
     "net/http"
+    "os"
     "time"
+    "fmt"
 
     "curtaincall.tech/pkg/web"
     "curtaincall.tech/pkg/retrieving"
@@ -17,7 +19,10 @@ import (
 
 func main() {
 
-    //TODO: Add go environment varialbe importing for api port and fqdn
+    dn, ok := os.LookupEnv("CC_DOMAIN_NAME")
+    if !ok {
+        log.Fatalf("Missing env var CC_DOMAIN_NAME")
+    }
 
     s, err := sqlite.NewStorage()
     if err != nil {
