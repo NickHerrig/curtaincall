@@ -25,40 +25,40 @@ jobs:
     - name: Test code
       run: go test ./...
 
-#    - name: build code
-#      run: go build -o curtaincall ./cmd/web
-#
-#    - name: Deploy binary and static files
-#      uses: appleboy/scp-action@master
-#      with:
-#        host: ${{ secrets.CC_HOSTNAME }}
-#        username: ${{ secrets.CC_SSH_USER }}
-#        key: ${{ secrets.CC_SSH_KEY }}
-#        source: curtaincall,setup.sql,ui/*
-#        target: /home/${{ secrets.CC_SSH_USER }}/
-#
-#    #TODO: temporary remove db...
-#    - name: remove db
-#      uses: appleboy/ssh-action@master
-#      with:
-#        host: ${{ secrets.CC_HOSTNAME }}
-#        username: ${{ secrets.CC_SSH_USER }}
-#        key: ${{ secrets.CC_SSH_KEY }}
-#        script: rm prod.db
-#
-#    - name: initalize db
-#      uses: appleboy/ssh-action@master
-#      with:
-#        host: ${{ secrets.CC_HOSTNAME }}
-#        username: ${{ secrets.CC_SSH_USER }}
-#        key: ${{ secrets.CC_SSH_KEY }}
-#        script: sqlite3 prod.db < setup.sql
-#        #TODO: make this script idempotent
-#
-#    - name: restart application
-#      uses: appleboy/ssh-action@master
-#      with:
-#        host: ${{ secrets.CC_HOSTNAME }}
-#        username: ${{ secrets.CC_SSH_USER }}
-#        key: ${{ secrets.CC_SSH_KEY }}
-#        script: sudo systemctl restart curtaincall
+    - name: build code
+      run: go build -o curtaincall ./cmd/web
+
+    - name: Deploy binary and static files
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.CC_HOSTNAME }}
+        username: ${{ secrets.CC_SSH_USER }}
+        key: ${{ secrets.CC_SSH_KEY }}
+        source: curtaincall,setup.sql,ui/*
+        target: /home/${{ secrets.CC_SSH_USER }}/
+
+    #TODO: temporary remove db...
+    - name: remove db
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.CC_HOSTNAME }}
+        username: ${{ secrets.CC_SSH_USER }}
+        key: ${{ secrets.CC_SSH_KEY }}
+        script: rm prod.db
+
+    - name: initalize db
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.CC_HOSTNAME }}
+        username: ${{ secrets.CC_SSH_USER }}
+        key: ${{ secrets.CC_SSH_KEY }}
+        script: sqlite3 prod.db < setup.sql
+        #TODO: make this script idempotent
+
+    - name: restart application
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.CC_HOSTNAME }}
+        username: ${{ secrets.CC_SSH_USER }}
+        key: ${{ secrets.CC_SSH_KEY }}
+        script: sudo systemctl restart curtaincall

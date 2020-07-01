@@ -4,25 +4,27 @@ import (
     "log"
     "net/http"
     "os"
+    "path/filepath"
     "time"
-    "fmt"
 
-    "curtaincall.tech/pkg/web"
     "curtaincall.tech/pkg/retrieving"
     "curtaincall.tech/pkg/storage/sqlite"
+    "curtaincall.tech/pkg/web"
 
-    "github.com/bmizerany/pat"
+    "github.com/coreos/go-systemd/activation"
     "github.com/justinas/alice"
+    "golang.org/x/crypto/acme/autocert"
+    "github.com/bmizerany/pat"
 
 
 )
 
 func main() {
 
-    dn, ok := os.LookupEnv("CC_DOMAIN_NAME")
-    if !ok {
-        log.Fatalf("Missing env var CC_DOMAIN_NAME")
-    }
+//    dn, ok := os.LookupEnv("CC_DOMAIN_NAME")
+//    if !ok {
+//        log.Fatalf("Missing env var CC_DOMAIN_NAME")
+//    }
 
     s, err := sqlite.NewStorage()
     if err != nil {
@@ -32,34 +34,57 @@ func main() {
     r := retrieving.NewService(s)
 
     standardMiddleware := alice.New(web.RecoverPanic, web.SecureHeaders, web.CorsHeaders)    
+    m := pat.New()
 
     //TODO: Add serving of index.html for VUE JS and vue router routes
     //TODO: Look into subroutes for entry point 
 
-    m := pat.New()
-    m.Get("/shows", http.HandlerFunc(web.RetrieveAllShows(r)))
+    m.Get("/api/shows", http.HandlerFunc(web.RetrieveAllShows(r)))
 
 	handler := standardMiddleware.Then(m)
 
-    //TODO: Add listener ports from socket file
-
-    //TODO: Add HTTP to HTTPS redirect
-
-    //TODO: Add HTTPS Server details
-
-    //TODO: Add auto cert renewal 
+    listeners, err := activation.Listeners()
+    if err != nil {
+        log.Fatal(err)
+    }
+    if len(listeners) != 2 {
+        log.Fatal("Missing systemd socket listeners for ports 80 and 443")
+    }
+    
+    httpListener := listeners[0]
+    httpsListener := listeners[1]
+    
+    go http.Serve(httpListener, http.HandlerFunc(func (w http.ResponseWriter, r *http.Request) {
+        target := "https://" + r.Host + r.URL.Path
+        if len(r.URL.RawQuery) > 0 {
+    	    target += "?" + r.URL.RawQuery
+        }
+        http.Redirect(w, r, target, http.StatusMovedPermanently)
+    }))
+    
+    crt := &autocert.Manager{
+        Prompt:     autocert.AcceptTOS,
+        HostPolicy: autocert.HostWhitelist("curtaincall.tech"),
+    }
+    
+    dir := filepath.Join(os.Getenv("HOME"), ".cache", "golang-autocert")
+    if err := os.MkdirAll(dir, 0700); err != nil {
+        log.Printf("warning: autocert Manager not using a cache: %v", err)
+    } else {
+        crt.Cache = autocert.DirCache(dir)
+    }
+    
+    srv := &http.Server{
+        Handler:      handler,
+        TLSConfig:    crt.TLSConfig(),
+        IdleTimeout:  time.Minute,
+        ReadTimeout:  5 * time.Second,
+        WriteTimeout: 10 * time.Second,
+    }
 
     //TODO: Zero Downtime Deployment?
 
-	srv := &http.Server{
-		Addr:         ":8888",
-		Handler:      handler,
-		IdleTimeout:  time.Minute,
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
-	}
-
-	log.Println("Listening on :8888")
+	log.Println("Listening on port 443")
 	log.Fatal(srv.ListenAndServe())
-
 }
+
