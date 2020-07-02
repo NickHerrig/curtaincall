@@ -46,7 +46,7 @@ jobs:
         host: ${{ secrets.CC_HOSTNAME }}
         username: ${{ secrets.CC_SSH_USER }}
         key: ${{ secrets.CC_SSH_KEY }}
-        source: frontend/dist/*
+        source: frontend/dist/
         target: /home/${{ secrets.CC_SSH_USER }}/
 
     #TODO: temporary remove db...
