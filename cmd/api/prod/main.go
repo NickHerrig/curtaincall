@@ -85,6 +85,6 @@ func main() {
     //TODO: Zero Downtime Deployment?
 
 	log.Println("Listening on port 443")
-	log.Fatal(srv.ListenAndServe())
+	log.Fatal(srv.ServeTLS(httpsListener, "", ""))
 }
 
