@@ -19,7 +19,7 @@ func NewStorage() (*Storage, error) {
     s := new(Storage)
     var err error
 
-	s.db, err = sql.Open("sqlite3", "./test.db")
+	s.db, err = sql.Open("sqlite3", "./curtaincall.db")
 	if err != nil {
 		return nil, err
 	}

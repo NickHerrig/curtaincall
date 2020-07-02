@@ -25,16 +25,28 @@ jobs:
 #    - name: Test code
 #      run: go test ./...
 
-    - name: build code
+    - name: build go code
       run: go build -o curtaincall ./cmd/api/prod
 
-    - name: Deploy binary and static files
+    - name: Deploy api binary and db setup script
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.CC_HOSTNAME }}
         username: ${{ secrets.CC_SSH_USER }}
         key: ${{ secrets.CC_SSH_KEY }}
-        source: curtaincall,setup.sql,ui/*
+        source: curtaincall,setup.sql
+        target: /home/${{ secrets.CC_SSH_USER }}/
+
+    - name: build frontend
+      run: cd frontend/ && yarn install && yarn build
+
+    - name: deploy frontend files
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.CC_HOSTNAME }}
+        username: ${{ secrets.CC_SSH_USER }}
+        key: ${{ secrets.CC_SSH_KEY }}
+        source: dist/*
         target: /home/${{ secrets.CC_SSH_USER }}/
 
     #TODO: temporary remove db...
@@ -44,7 +56,7 @@ jobs:
         host: ${{ secrets.CC_HOSTNAME }}
         username: ${{ secrets.CC_SSH_USER }}
         key: ${{ secrets.CC_SSH_KEY }}
-        script: rm prod.db
+        script: rm curtaincall.db
 
     - name: initalize db
       uses: appleboy/ssh-action@master
@@ -52,7 +64,7 @@ jobs:
         host: ${{ secrets.CC_HOSTNAME }}
         username: ${{ secrets.CC_SSH_USER }}
         key: ${{ secrets.CC_SSH_KEY }}
-        script: sqlite3 prod.db < setup.sql
+        script: sqlite3 curtaincall.db < setup.sql
         #TODO: make this script idempotent
 
     - name: restart application
