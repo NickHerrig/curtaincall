@@ -19,6 +19,14 @@ import (
 
 )
 
+func IndexHandler(entrypoint string) func(w http.ResponseWriter, r *http.Request) {
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, entrypoint)
+	}
+
+	return http.HandlerFunc(fn)
+}
+
 func main() {
 
 //    dn, ok := os.LookupEnv("CC_DOMAIN_NAME")
@@ -36,10 +44,10 @@ func main() {
     standardMiddleware := alice.New(web.RecoverPanic, web.SecureHeaders, web.CorsHeaders)    
     m := pat.New()
 
-    //TODO: Add serving of index.html for VUE JS and vue router routes
-    //TODO: Look into subroutes for entry point 
-
     m.Get("/api/shows", http.HandlerFunc(web.RetrieveAllShows(r)))
+
+    fileServer := http.FileServer(http.Dir("./frontend/dist/"))
+    m.Get("/", http.HanlderFunc(IndexHandler("~/index.html")))
 
 	handler := standardMiddleware.Then(m)
 
