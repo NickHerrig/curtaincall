@@ -47,7 +47,9 @@ func main() {
     m.Get("/api/shows", http.HandlerFunc(web.RetrieveAllShows(r)))
 
     fileServer := http.FileServer(http.Dir("./frontend/dist/"))
-    m.Get("/", http.HanlderFunc(IndexHandler("~/index.html")))
+    m.Get("/dist/", http.StripPrefix("/dist", fileServer))
+
+    m.Get("/", http.HandlerFunc(IndexHandler("~/index.html")))
 
 	handler := standardMiddleware.Then(m)
 
