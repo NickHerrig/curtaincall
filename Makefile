@@ -11,13 +11,27 @@ start-api:
 start-frontend:
 	cd frontend/ && yarn install && yarn serve
 
-# TODO: build go code
 
-# TODO: build frontend 
+.PHONY: build-api
+build-api:
+	go build -o curtaincall ./cmd/api/prod
 
-# TODO: Distribute binary and frontend
 
-# TODO: Database Migration
+.PHONY: build-frontend
+build-frontend:
+	cd frontend/ && yarn install && yarn build
+
+
+.PHONY: dist
+dist: build-api build-frontend
+	mkdir -p dist/
+	cp -r setup.sql dist/setup.sql
+	cp -r curtaincall dist/curtaincall
+	cp -r frontend/dist/ dist/frontend/
+
+.PHONY: clean
+clean: 
+	rm -rf curtaincall frontend/dist dist/
 
 .PHONY: help
 help:
