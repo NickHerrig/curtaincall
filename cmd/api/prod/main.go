@@ -38,8 +38,8 @@ func main() {
     standardMiddleware := alice.New(web.RecoverPanic, web.SecureHeaders, web.CorsHeaders)    
     m := pat.New()
 
-    m.Get("/", http.FileServer(http.Dir("/home/curtaincall/frontend")))
-    m.Get("/shows", ServeIndex("/home/curtaincall/frontend"))
+    m.Get("/", http.FileServer(http.Dir("/home/curtaincall/")))
+    m.Get("/shows", ServeIndex("/home/curtaincall/"))
 
     m.Get("/api/shows", http.HandlerFunc(web.RetrieveAllShows(r)))
 
