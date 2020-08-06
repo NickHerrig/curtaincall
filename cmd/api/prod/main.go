@@ -5,6 +5,7 @@ import (
     "net/http"
     "os"
     "path/filepath"
+    "path"
     "time"
 
     "curtaincall.tech/pkg/retrieving"
@@ -19,20 +20,13 @@ import (
 
 )
 
-func IndexHandler(entrypoint string) func(w http.ResponseWriter, r *http.Request) {
-	fn := func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, entrypoint)
-	}
-
-	return http.HandlerFunc(fn)
+func ServeIndex(webRoot string) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, path.Join(webRoot, "index.html"))
+	})
 }
 
 func main() {
-
-//    dn, ok := os.LookupEnv("CC_DOMAIN_NAME")
-//    if !ok {
-//        log.Fatalf("Missing env var CC_DOMAIN_NAME")
-//    }
 
     s, err := sqlite.NewStorage()
     if err != nil {
@@ -44,12 +38,10 @@ func main() {
     standardMiddleware := alice.New(web.RecoverPanic, web.SecureHeaders, web.CorsHeaders)    
     m := pat.New()
 
+    http.Handle("/", http.FileServer(http.Dir("/home/curtaincall/frontend")))
+    http.Handle("/shows", ServeIndex("/home/curtaincall/frontend"))
+
     m.Get("/api/shows", http.HandlerFunc(web.RetrieveAllShows(r)))
-
-    fileServer := http.FileServer(http.Dir("./frontend/dist/"))
-    m.Get("/dist/", http.StripPrefix("/dist", fileServer))
-
-    m.Get("/", http.HandlerFunc(IndexHandler("~/index.html")))
 
 	handler := standardMiddleware.Then(m)
 
