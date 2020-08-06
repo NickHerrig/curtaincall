@@ -32,7 +32,7 @@ jobs:
         username: ${{ secrets.CC_SSH_USER }}
         key: ${{ secrets.CC_SSH_KEY }}
         source: dist/*
-        strip_components: 2
+        strip_components: 1
         target: /home/${{ secrets.CC_SSH_USER }}/
 
     - name: remove db

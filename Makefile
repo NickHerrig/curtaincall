@@ -14,7 +14,7 @@ start-frontend:
 
 .PHONY: build-api
 build-api:
-	go build -o curtaincall ./cmd/api/prod
+	go build -o curtaincall -v ./cmd/api/prod
 
 
 .PHONY: build-frontend
@@ -27,7 +27,7 @@ dist: build-api build-frontend
 	mkdir -p dist/
 	cp -r setup.sql dist/setup.sql
 	cp -r curtaincall dist/curtaincall
-	cp -r frontend/dist/ dist/frontend/
+	cp -r frontend/dist/ dist/
 
 .PHONY: clean
 clean: 
