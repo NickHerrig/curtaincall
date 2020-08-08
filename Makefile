@@ -28,7 +28,7 @@ dist: build-api build-frontend
 	mkdir -p dist/
 	cp -r setup.sql dist/setup.sql
 	cp -r curtaincall dist/curtaincall
-	cp -r frontend/dist/ dist/
+	cp -r frontend/dist/ dist/frontend
 
 .PHONY: clean
 clean: 

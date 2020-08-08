@@ -17,9 +17,6 @@
 
 import ShowTile from '@/components/ShowTile.vue'
 
-console.log(process.env.VUE_CURTAINCALL_API_FQDN)
-console.log(process.env.VUE_CURTAINCALL_API_FQDN + "/shows")
-
 export default {
   name: 'Shows',
   components: {
