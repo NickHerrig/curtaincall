@@ -27,7 +27,7 @@ func main() {
     standardMiddleware := alice.New(web.RecoverPanic, web.SecureHeaders, web.CorsHeaders)    
 
     m := pat.New()
-    m.Get("/shows", http.HandlerFunc(web.RetrieveAllShows(r)))
+    m.Get("/api/shows", http.HandlerFunc(web.RetrieveAllShows(r)))
 
 	handler := standardMiddleware.Then(m)
 

@@ -9,7 +9,8 @@ start-api:
 
 .PHONY: start-frontend
 start-frontend:
-	cd frontend/ && yarn install && yarn serve
+	cd frontend/ && yarn install && yarn serve --mode development
+
 
 
 .PHONY: build-api

@@ -17,6 +17,9 @@
 
 import ShowTile from '@/components/ShowTile.vue'
 
+console.log(process.env.VUE_CURTAINCALL_API_FQDN)
+console.log(process.env.VUE_CURTAINCALL_API_FQDN + "/shows")
+
 export default {
   name: 'Shows',
   components: {
@@ -30,7 +33,7 @@ export default {
   methods: {
     fetchAllShows: async function() {
 
-      let response = await fetch("http://localhost:8888/shows", {
+      let response = await fetch(process.env.VUE_APP_API_FQDN + "/shows", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
