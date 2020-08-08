@@ -9,7 +9,7 @@ import (
     "curtaincall.tech/pkg/retrieving"
     "curtaincall.tech/pkg/storage/sqlite"
 
-    "github.com/bmizerany/pat"
+    "github.com/gorilla/mux"
     "github.com/justinas/alice"
 
 
@@ -26,10 +26,12 @@ func main() {
 
     standardMiddleware := alice.New(web.RecoverPanic, web.SecureHeaders, web.CorsHeaders)    
 
-    m := pat.New()
-    m.Get("/api/shows", http.HandlerFunc(web.RetrieveAllShows(r)))
+    rtr := mux.NewRouter()
+    api := rtr.PathPrefix("/api/v1/").Subrouter()
+    api.HandleFunc("/shows", web.RetrieveAllShows(r)).Methods("GET")
 
-	handler := standardMiddleware.Then(m)
+
+	handler := standardMiddleware.Then(rtr)
 
 	srv := &http.Server{
 		Addr:         ":8888",

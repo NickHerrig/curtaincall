@@ -5,7 +5,6 @@ import (
     "net/http"
     "os"
     "path/filepath"
-    "path"
     "time"
 
     "curtaincall.tech/pkg/retrieving"
@@ -15,15 +14,17 @@ import (
     "github.com/coreos/go-systemd/activation"
     "github.com/justinas/alice"
     "golang.org/x/crypto/acme/autocert"
-    "github.com/bmizerany/pat"
+    "github.com/gorilla/mux"
 
 
 )
 
-func ServeIndex(webRoot string) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, path.Join(webRoot, "index.html"))
-	})
+func IndexHandler(entrypoint string) func(w http.ResponseWriter, r *http.Request) {
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, entrypoint)
+	}
+
+	return http.HandlerFunc(fn)
 }
 
 func main() {
@@ -36,14 +37,15 @@ func main() {
     r := retrieving.NewService(s)
 
     standardMiddleware := alice.New(web.RecoverPanic, web.SecureHeaders, web.CorsHeaders)    
-    m := pat.New()
-    m.Get("/", http.FileServer(http.Dir("/home/curtaincall/frontend")))
 
-    m.Get("/shows", ServeIndex("/home/curtaincall/frontend"))
+    rtr := mux.NewRouter()
+    api := rtr.PathPrefix("/api/v1/").Subrouter()
+    api.HandleFunc("/shows", web.RetrieveAllShows(r)).Methods("GET")
 
-    m.Get("/api/shows", http.HandlerFunc(web.RetrieveAllShows(r)))
+	rtr.PathPrefix("/static").Handler(http.FileServer(http.Dir("/home/curtaincall/dist/")))
+	rtr.PathPrefix("/").HandlerFunc(IndexHandler("/home/curtaincall/dist/index.html"))
 
-	handler := standardMiddleware.Then(m)
+	handler := standardMiddleware.Then(rtr)
 
     listeners, err := activation.Listeners()
     if err != nil {
