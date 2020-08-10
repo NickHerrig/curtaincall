@@ -42,8 +42,8 @@ func main() {
     api := rtr.PathPrefix("/api/v1/").Subrouter()
     api.HandleFunc("/shows", web.RetrieveAllShows(r)).Methods("GET")
 
-	rtr.PathPrefix("/static").Handler(http.FileServer(http.Dir("/home/curtaincall/dist/")))
-	rtr.PathPrefix("/").HandlerFunc(IndexHandler("/home/curtaincall/dist/index.html"))
+	rtr.PathPrefix("/dist").Handler(http.FileServer(http.Dir("/home/curtaincall/dist/")))
+	rtr.PathPrefix("/").HandlerFunc(IndexHandler("/home/curtaincall/index.html"))
 
 	handler := standardMiddleware.Then(rtr)
 
